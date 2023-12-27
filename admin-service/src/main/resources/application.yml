@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: admin-service
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/admin-db
+    username: abbes
+    password: abbes
+  jpa:
+    hibernate:
+      ddl-auto: update
+server:
+  port: 0
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka:password@localhost:8761/eureka

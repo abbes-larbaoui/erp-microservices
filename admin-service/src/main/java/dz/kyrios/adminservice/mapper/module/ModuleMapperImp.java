@@ -1,0 +1,32 @@
+package dz.kyrios.adminservice.mapper.module;
+
+import dz.kyrios.adminservice.dto.module.ModuleRequest;
+import dz.kyrios.adminservice.dto.module.ModuleResponse;
+import dz.kyrios.adminservice.entity.Module;
+import org.springframework.stereotype.Component;
+
+@Component
+public class ModuleMapperImp implements ModuleMapper{
+
+    @Override
+    public Module requestToEntity(ModuleRequest request) {
+        return Module.builder()
+                .id(request.getId())
+                .moduleName(request.getModuleName())
+                .color(request.getColor())
+                .icon(request.getIcon())
+                .uri(request.getUri())
+                .build();
+    }
+
+    @Override
+    public ModuleResponse entityToModuleResponse(Module entity) {
+        return ModuleResponse.builder()
+                .id(entity.getId())
+                .moduleName(entity.getModuleName())
+                .color(entity.getColor())
+                .icon(entity.getIcon())
+                .uri(entity.getUri())
+                .build();
+    }
+}

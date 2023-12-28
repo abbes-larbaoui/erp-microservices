@@ -25,6 +25,9 @@ public class Profile implements Serializable {
     private User user;
 
     @ManyToMany
+    private Set<Module> modules;
+
+    @ManyToMany
     private Set<Role> roles;
 
     @ManyToMany

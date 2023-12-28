@@ -1,8 +1,8 @@
 package dz.kyrios.adminservice.config.filter.handlerMethodArgumentResolver;
 
-import com.enageo.recruitment.filter.clause.Clause;
-import com.enageo.recruitment.filter.clause.ClauseOneArg;
-import com.enageo.recruitment.filter.enums.Operation;
+import dz.kyrios.adminservice.config.filter.clause.Clause;
+import dz.kyrios.adminservice.config.filter.clause.ClauseOneArg;
+import dz.kyrios.adminservice.config.filter.enums.Operation;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
@@ -12,6 +12,8 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.util.StringUtils.hasText;
 
 public class CritiriaParamsArgumentResolver implements HandlerMethodArgumentResolver {
     @Override

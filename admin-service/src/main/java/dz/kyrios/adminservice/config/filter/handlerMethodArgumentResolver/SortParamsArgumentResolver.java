@@ -1,6 +1,6 @@
 package dz.kyrios.adminservice.config.filter.handlerMethodArgumentResolver;
 
-import com.enageo.recruitment.filter.specification.RequestService;
+import dz.kyrios.adminservice.config.filter.specification.RequestService;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -10,6 +10,8 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 import javax.servlet.http.HttpServletRequest;
+
+import static org.springframework.util.StringUtils.hasText;
 
 public class SortParamsArgumentResolver implements HandlerMethodArgumentResolver {
     @Override

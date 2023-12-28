@@ -1,14 +1,19 @@
 package dz.kyrios.adminservice.config.filter.specification;
 
-import com.kyrios.authzservice.filter.clause.Clause;
-import com.kyrios.authzservice.filter.clause.ClauseArrayArgs;
-import com.kyrios.authzservice.filter.clause.ClauseOneArg;
-import com.kyrios.authzservice.filter.clause.ClauseTwoArgs;
 
+import dz.kyrios.adminservice.config.filter.clause.Clause;
+import dz.kyrios.adminservice.config.filter.clause.ClauseArrayArgs;
+import dz.kyrios.adminservice.config.filter.clause.ClauseOneArg;
+import dz.kyrios.adminservice.config.filter.clause.ClauseTwoArgs;
+import org.springframework.data.jpa.domain.Specification;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 
 public class GenericSpecification <T> implements Specification<T> {

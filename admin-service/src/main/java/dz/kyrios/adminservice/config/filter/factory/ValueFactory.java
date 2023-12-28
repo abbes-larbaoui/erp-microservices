@@ -1,6 +1,6 @@
 package dz.kyrios.adminservice.config.filter.factory;
 
-import com.enageo.recruitment.filter.converter.DateConvertor;
+import dz.kyrios.adminservice.config.filter.converter.DateConvertor;
 import org.springframework.util.ClassUtils;
 
 import javax.persistence.criteria.Join;

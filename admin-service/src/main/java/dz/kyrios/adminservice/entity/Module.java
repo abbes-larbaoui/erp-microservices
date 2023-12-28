@@ -1,9 +1,6 @@
 package dz.kyrios.adminservice.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -13,6 +10,7 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity(name = "module")
 public class Module implements Serializable {
 
@@ -31,4 +29,8 @@ public class Module implements Serializable {
     @NotBlank
     @Column(name = "icon", nullable = false)
     private String icon;
+
+    @NotBlank
+    @Column(name = "uri", nullable = false)
+    private String uri;
 }

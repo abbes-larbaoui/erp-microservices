@@ -12,4 +12,5 @@ public class ModuleRequest {
     private String moduleName;
     private String color;
     private String icon;
+    private String uri;
 }

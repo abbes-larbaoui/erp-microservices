@@ -1,6 +1,12 @@
 spring:
   application:
     name: erp-api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
 server:
   port: 8080
 eureka:

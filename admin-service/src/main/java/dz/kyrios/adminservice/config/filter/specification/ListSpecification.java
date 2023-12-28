@@ -1,8 +1,8 @@
 package dz.kyrios.adminservice.config.filter.specification;
 
 
-import com.enageo.recruitment.filter.clause.Clause;
-import com.enageo.recruitment.filter.enums.Connecteur;
+import dz.kyrios.adminservice.config.filter.clause.Clause;
+import dz.kyrios.adminservice.config.filter.enums.Connecteur;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;

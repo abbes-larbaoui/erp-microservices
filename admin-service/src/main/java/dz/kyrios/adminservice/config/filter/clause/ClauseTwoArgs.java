@@ -1,10 +1,10 @@
 package dz.kyrios.adminservice.config.filter.clause;
 
 
-import com.enageo.recruitment.filter.creator.AttribueCreator;
-import com.enageo.recruitment.filter.creator.JoinCreator;
-import com.enageo.recruitment.filter.enums.Operation;
-import com.enageo.recruitment.filter.factory.ValueFactory;
+import dz.kyrios.adminservice.config.filter.creator.AttribueCreator;
+import dz.kyrios.adminservice.config.filter.creator.JoinCreator;
+import dz.kyrios.adminservice.config.filter.enums.Operation;
+import dz.kyrios.adminservice.config.filter.factory.ValueFactory;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Join;

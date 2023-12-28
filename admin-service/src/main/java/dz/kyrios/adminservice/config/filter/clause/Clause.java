@@ -1,7 +1,6 @@
 package dz.kyrios.adminservice.config.filter.clause;
 
-
-import com.enageo.recruitment.filter.enums.Operation;
+import dz.kyrios.adminservice.config.filter.enums.Operation;
 
 public class Clause {
     private String filed;

@@ -8,5 +8,5 @@ public interface ModuleMapper {
 
     Module requestToEntity(ModuleRequest request);
 
-    ModuleResponse entityToModuleResponse(Module entity);
+    ModuleResponse entityToResponse(Module entity);
 }

@@ -42,7 +42,7 @@ public class ModuleService {
         page = moduleRepository.findAll(specification, pageRequest);
 
         moduleResponseList = page.getContent().stream()
-                .map(moduleMapper::entityToModuleResponse)
+                .map(moduleMapper::entityToResponse)
                 .collect(Collectors.toList());
         return new PageImpl<>(moduleResponseList, pageRequest, page.getTotalElements());
     }
@@ -50,12 +50,12 @@ public class ModuleService {
     public ModuleResponse getOne(Long id) {
         Module module = moduleRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(id, "Module not found with id: "));
-        return moduleMapper.entityToModuleResponse(module);
+        return moduleMapper.entityToResponse(module);
     }
 
     public ModuleResponse create(ModuleRequest request) {
         Module created = moduleRepository.save(moduleMapper.requestToEntity(request));
-        return moduleMapper.entityToModuleResponse(created);
+        return moduleMapper.entityToResponse(created);
     }
 
     public ModuleResponse update(ModuleRequest request, Long id) {
@@ -66,7 +66,7 @@ public class ModuleService {
         entity.setIcon(request.getIcon());
         entity.setUri(request.getUri());
 
-        return moduleMapper.entityToModuleResponse(entity);
+        return moduleMapper.entityToResponse(entity);
     }
 
     public void delete(Long id) {

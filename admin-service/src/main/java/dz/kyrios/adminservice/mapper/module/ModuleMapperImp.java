@@ -20,7 +20,7 @@ public class ModuleMapperImp implements ModuleMapper{
     }
 
     @Override
-    public ModuleResponse entityToModuleResponse(Module entity) {
+    public ModuleResponse entityToResponse(Module entity) {
         return ModuleResponse.builder()
                 .id(entity.getId())
                 .moduleName(entity.getModuleName())

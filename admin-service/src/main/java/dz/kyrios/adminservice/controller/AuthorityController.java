@@ -2,6 +2,7 @@ package dz.kyrios.adminservice.controller;
 
 import dz.kyrios.adminservice.config.filter.clause.Clause;
 import dz.kyrios.adminservice.config.filter.clause.ClauseOneArg;
+import dz.kyrios.adminservice.config.filter.enums.Operation;
 import dz.kyrios.adminservice.config.filter.handlerMethodArgumentResolver.Critiria;
 import dz.kyrios.adminservice.config.filter.handlerMethodArgumentResolver.SearchValue;
 import dz.kyrios.adminservice.config.filter.handlerMethodArgumentResolver.SortParam;
@@ -31,6 +32,16 @@ public class AuthorityController {
     public PageImpl<AuthorityResponse> getAllFilter(@SortParam PageRequest pageRequest,
                                                     @Critiria List<Clause> filter,
                                                     @SearchValue ClauseOneArg searchValue) {
+        filter.add(searchValue);
+        return authorityService.findAllFilter(pageRequest, filter);
+    }
+
+    @GetMapping("/api/v1/authority/module/{moduleId}")
+    public PageImpl<AuthorityResponse> getAllByModuleFilter(@SortParam PageRequest pageRequest,
+                                                            @Critiria List<Clause> filter,
+                                                            @SearchValue ClauseOneArg searchValue,
+                                                            @PathVariable Long moduleId) {
+        filter.add(new ClauseOneArg("module.id", Operation.Equals, moduleId.toString()));
         filter.add(searchValue);
         return authorityService.findAllFilter(pageRequest, filter);
     }

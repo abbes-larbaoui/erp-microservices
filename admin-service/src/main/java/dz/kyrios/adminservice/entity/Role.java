@@ -1,9 +1,6 @@
 package dz.kyrios.adminservice.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -14,6 +11,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity(name = "t_role")
 public class Role implements Serializable {
 
@@ -27,4 +25,18 @@ public class Role implements Serializable {
 
     @ManyToMany
     private Set<Authority> authorities;
+
+    @ManyToOne
+    @JoinColumn(name = "module_id", referencedColumnName = "id", nullable = false)
+    private Module module;
+
+    public void addAuthority(Authority authority) {
+        this.getAuthorities().add(authority);
+    }
+
+    public void removeAuthority(Authority authority) {
+        if (this.getAuthorities() != null && !this.getAuthorities().isEmpty()) {
+            this.getAuthorities().remove(authority);
+        }
+    }
 }

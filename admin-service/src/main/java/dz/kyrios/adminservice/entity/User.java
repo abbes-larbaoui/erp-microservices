@@ -1,9 +1,6 @@
 package dz.kyrios.adminservice.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -15,6 +12,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity(name = "t_user")
 public class User implements Serializable {
 
@@ -46,4 +44,11 @@ public class User implements Serializable {
     @OneToOne
     @JoinColumn(name = "profile_id", referencedColumnName = "id", nullable = false)
     private Profile actifProfile;
+
+    public void addProfile(Profile profile) {
+        if (this.getProfiles() != null && !this.getProfiles().isEmpty()) {
+            this.getProfiles().add(profile);
+            profile.setUser(this);
+        }
+    }
 }

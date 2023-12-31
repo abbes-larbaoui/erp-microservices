@@ -1,1 +1,4 @@
 /.idea/
+/admin-service/target/
+/erp-api-gateway/target/
+/erp-discovery-server/target/

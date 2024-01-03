@@ -3,6 +3,7 @@ package dz.kyrios.adminservice.service;
 import dz.kyrios.adminservice.config.exception.NotFoundException;
 import dz.kyrios.adminservice.config.filter.clause.Clause;
 import dz.kyrios.adminservice.config.filter.specification.GenericSpecification;
+import dz.kyrios.adminservice.dto.user.UserCreateRequest;
 import dz.kyrios.adminservice.dto.user.UserRequest;
 import dz.kyrios.adminservice.dto.user.UserResponse;
 import dz.kyrios.adminservice.entity.Profile;
@@ -25,6 +26,8 @@ import java.util.stream.Collectors;
 @Service
 public class UserService {
 
+    private final KeycloakService keycloakService;
+
     private final UserRepository userRepository;
 
     private final ProfileRepository profileRepository;
@@ -32,9 +35,11 @@ public class UserService {
     private final UserMapper userMapper;
 
     @Autowired
-    public UserService(UserRepository userRepository,
+    public UserService(KeycloakService keycloakService,
+                       UserRepository userRepository,
                        ProfileRepository profileRepository,
                        UserMapper userMapper) {
+        this.keycloakService = keycloakService;
         this.userRepository = userRepository;
         this.profileRepository = profileRepository;
         this.userMapper = userMapper;
@@ -59,11 +64,15 @@ public class UserService {
         return userMapper.entityToResponse(user);
     }
 
-    public UserResponse create(UserRequest request, Long profileTypeId) {
+    public UserResponse create(UserCreateRequest request, Long profileTypeId) {
         //TODO: create user in keycloak server
+        String uuid = keycloakService.createUser(request);
+        if (uuid == null || uuid.isEmpty()) {
+            throw new RuntimeException("Could not create keycloak User");
+        }
 
         Profile defaultProfile;
-        if (profileTypeId != null) {
+        if (profileTypeId != -1) {
             Profile profileType = profileRepository.findById(profileTypeId)
                     .orElseThrow(() -> new NotFoundException(profileTypeId, "Profile not found with id: "));
             defaultProfile = Profile.builder()
@@ -79,9 +88,12 @@ public class UserService {
                     .build();
         }
         User user = userMapper.requestToEntity(request);
+        user.setUuid(uuid);
         defaultProfile.setUser(user);
         user.setActifProfile(defaultProfile);
         user.addProfile(defaultProfile);
+
+         // Save the Profile, which also saves the User due to cascading
 
         return userMapper.entityToResponse(userRepository.save(user));
     }

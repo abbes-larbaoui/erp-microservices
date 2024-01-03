@@ -40,9 +40,8 @@ public class User implements Serializable {
     @OneToMany(mappedBy = "user" ,cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Profile> profiles;
 
-    @NotNull
-    @OneToOne
-    @JoinColumn(name = "profile_id", referencedColumnName = "id", nullable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "profile_id", referencedColumnName = "id")
     private Profile actifProfile;
 
     public void addProfile(Profile profile) {

@@ -23,7 +23,7 @@ public class Profile implements Serializable {
     @Column(name = "libelle", nullable = false)
     private String libelle;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 

@@ -17,6 +17,6 @@ public class UserResponse {
     private String email;
     private String firstName;
     private String lastName;
-    private Set<ProfileResponse> profileResponses;
-    private ProfileResponse actifProfile;
+//    private Set<ProfileResponse> profileResponses;
+//    private ProfileResponse actifProfile;
 }

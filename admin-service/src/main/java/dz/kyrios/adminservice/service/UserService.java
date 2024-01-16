@@ -7,6 +7,7 @@ import dz.kyrios.adminservice.dto.user.UserCreateRequest;
 import dz.kyrios.adminservice.dto.user.UserRequest;
 import dz.kyrios.adminservice.dto.user.UserResponse;
 import dz.kyrios.adminservice.entity.Profile;
+import dz.kyrios.adminservice.entity.Role;
 import dz.kyrios.adminservice.entity.User;
 import dz.kyrios.adminservice.mapper.user.UserMapper;
 import dz.kyrios.adminservice.repository.ProfileRepository;
@@ -96,5 +97,13 @@ public class UserService {
          // Save the Profile, which also saves the User due to cascading
 
         return userMapper.entityToResponse(userRepository.save(user));
+    }
+
+    public void delete(Long id) {
+        User entity = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(id, "User not found with id: "));
+        if (keycloakService.deleteUser(entity.getUuid())) {
+            userRepository.delete(entity);
+        }
     }
 }

@@ -7,8 +7,8 @@ import dz.kyrios.adminservice.dto.user.UserCreateRequest;
 import dz.kyrios.adminservice.dto.user.UserRequest;
 import dz.kyrios.adminservice.dto.user.UserResponse;
 import dz.kyrios.adminservice.entity.Profile;
-import dz.kyrios.adminservice.entity.Role;
 import dz.kyrios.adminservice.entity.User;
+import dz.kyrios.adminservice.enums.KeycloakRequiredAction;
 import dz.kyrios.adminservice.mapper.user.UserMapper;
 import dz.kyrios.adminservice.repository.ProfileRepository;
 import dz.kyrios.adminservice.repository.UserRepository;
@@ -66,7 +66,6 @@ public class UserService {
     }
 
     public UserResponse create(UserCreateRequest request, Long profileTypeId) {
-        //TODO: create user in keycloak server
         String uuid = keycloakService.createUser(request);
         if (uuid == null || uuid.isEmpty()) {
             throw new RuntimeException("Could not create keycloak User");
@@ -105,5 +104,24 @@ public class UserService {
         if (keycloakService.deleteUser(entity.getUuid())) {
             userRepository.delete(entity);
         }
+    }
+
+    public UserResponse update(UserRequest request, Long id) {
+        User entity = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(id, "User not found with id: "));
+
+        keycloakService.editUser(entity.getUuid(), request);
+        entity.setEmail(request.getEmail());
+        entity.setFirstName(request.getFirstName());
+        entity.setLastName(request.getLastName());
+
+        return userMapper.entityToResponse(entity);
+    }
+
+    public void userRequiredActions(Long id, String[] requiredActions) {
+        User entity = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(id, "User not found with id: "));
+
+        keycloakService.userRequiredAction(entity.getUuid(), requiredActions);
     }
 }

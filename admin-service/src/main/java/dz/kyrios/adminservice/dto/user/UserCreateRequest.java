@@ -1,6 +1,9 @@
 package dz.kyrios.adminservice.dto.user;
 
+import dz.kyrios.adminservice.enums.KeycloakRequiredAction;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,4 +17,7 @@ public class UserCreateRequest {
     private String lastName;
     private String password;
     private Boolean temporary;
+    private Boolean emailVerified;
+    private Boolean enabled;
+    private List<KeycloakRequiredAction> requiredActions;
 }

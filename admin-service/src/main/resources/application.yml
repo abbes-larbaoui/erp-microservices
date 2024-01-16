@@ -11,7 +11,7 @@ spring:
     password: abbes
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
 server:
   port: 0
 eureka:

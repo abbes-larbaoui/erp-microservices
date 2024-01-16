@@ -7,7 +7,11 @@ spring:
         locator:
           enabled: true
           lower-case-service-id: true
-#      routes[0]:
+#      routes:
+#        - id: auth-server
+#          uri: http://localhost:8088
+#          predicates:
+#            - Path=/auth
 server:
   port: 8080
 eureka:

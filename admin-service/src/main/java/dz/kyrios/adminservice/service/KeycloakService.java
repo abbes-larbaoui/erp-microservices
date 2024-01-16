@@ -24,8 +24,9 @@ public class KeycloakService {
 
     public String createUser(UserCreateRequest request) {
 
+        // TODO: change grantType
         keycloak = KeycloakBuilder.builder()
-                .serverUrl("http://localhost:8088/auth")
+                .serverUrl("http://localhost:8088/auth/")
                 .realm(realm)
                 .clientId("admin-cli")
                 .grantType("password")
@@ -51,5 +52,19 @@ public class KeycloakService {
             return org.keycloak.admin.client.CreatedResponseUtil.getCreatedId(response); // returns String (Id of created User)
         }
         return "";
+    }
+
+    public boolean deleteUser(String uuid) {
+        keycloak = KeycloakBuilder.builder()
+                .serverUrl("http://localhost:8088/auth")
+                .realm(realm)
+                .clientId("admin-cli")
+                .grantType("password")
+                .username("abbes_kyrios")
+                .password("abbes")
+                .build();
+
+        Response response = keycloak.realm(realm).users().delete(uuid);
+        return response.getStatus() == Response.Status.OK.getStatusCode();
     }
 }

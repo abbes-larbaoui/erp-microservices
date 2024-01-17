@@ -5,8 +5,6 @@ import dz.kyrios.adminservice.config.filter.clause.ClauseOneArg;
 import dz.kyrios.adminservice.config.filter.handlerMethodArgumentResolver.Critiria;
 import dz.kyrios.adminservice.config.filter.handlerMethodArgumentResolver.SearchValue;
 import dz.kyrios.adminservice.config.filter.handlerMethodArgumentResolver.SortParam;
-import dz.kyrios.adminservice.dto.role.RoleRequest;
-import dz.kyrios.adminservice.dto.role.RoleResponse;
 import dz.kyrios.adminservice.dto.user.UserCreateRequest;
 import dz.kyrios.adminservice.dto.user.UserRequest;
 import dz.kyrios.adminservice.dto.user.UserResponse;
@@ -69,12 +67,19 @@ public class UserController {
 
     @PostMapping("/api/v1/user/required-actions/{id}")
     public ResponseEntity<Object> addRequiredActions(@RequestBody KeycloakRequiredAction[] requiredActions,
-                                               @PathVariable Long id) {
+                                                     @PathVariable Long id) {
         try {
             userService.userRequiredActions(id, Arrays.stream(requiredActions).map(Enum::toString).toArray(String[]::new));
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PostMapping("/api/v1/user/enable-disable-user/{id}")
+    public ResponseEntity<UserResponse> enableDisableUser(@RequestBody UserCreateRequest request,
+                                                          @PathVariable Long id) {
+        UserResponse response = userService.enableDisableUser(id, request.getActif());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

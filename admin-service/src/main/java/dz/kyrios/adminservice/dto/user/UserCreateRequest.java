@@ -18,6 +18,6 @@ public class UserCreateRequest {
     private String password;
     private Boolean temporary;
     private Boolean emailVerified;
-    private Boolean enabled;
+    private Boolean actif;
     private List<KeycloakRequiredAction> requiredActions;
 }

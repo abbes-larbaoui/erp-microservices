@@ -124,4 +124,14 @@ public class UserService {
 
         keycloakService.userRequiredAction(entity.getUuid(), requiredActions);
     }
+
+    public UserResponse enableDisableUser(Long id, Boolean enable) {
+        User entity = userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(id, "User not found with id: "));
+
+        keycloakService.enableDisableUser(entity.getUuid(), enable);
+        entity.setActif(enable);
+
+        return userMapper.entityToResponse(entity);
+    }
 }

@@ -37,6 +37,9 @@ public class User implements Serializable {
     @Column(name = "last_name")
     private String lastName;
 
+    @Column(name = "actif")
+    private Boolean actif = Boolean.TRUE;
+
     @OneToMany(mappedBy = "user" ,cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Profile> profiles;
 

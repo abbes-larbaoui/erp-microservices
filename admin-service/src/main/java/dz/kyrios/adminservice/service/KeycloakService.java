@@ -42,7 +42,7 @@ public class KeycloakService {
         userRepresentation.setLastName(request.getLastName());
         userRepresentation.setEmail(request.getEmail());
         userRepresentation.setEmailVerified(request.getEmailVerified());
-        userRepresentation.setEnabled(request.getEnabled());
+        userRepresentation.setEnabled(request.getActif());
 
         // set other required values
         CredentialRepresentation credentialRepresentation = new CredentialRepresentation();
@@ -59,6 +59,20 @@ public class KeycloakService {
             return org.keycloak.admin.client.CreatedResponseUtil.getCreatedId(response); // returns String (Id of created User)
         }
         return "";
+    }
+
+    public UserRepresentation getUser(String uuid) {
+        keycloak = KeycloakBuilder.builder()
+                .serverUrl("http://localhost:8088/auth")
+                .realm(realm)
+                .clientId("admin-cli")
+                .grantType("password")
+                .username("abbes_kyrios")
+                .password("abbes")
+                .build();
+
+        UserResource userResource = keycloak.realm(realm).users().get(uuid);
+        return userResource.toRepresentation();
     }
 
     public boolean deleteUser(String uuid) {
@@ -108,4 +122,21 @@ public class KeycloakService {
         user.getRequiredActions().addAll(List.of(requiredActions));
         userResource.update(user);
     }
+
+    public void enableDisableUser(String uuid, Boolean enable) {
+        keycloak = KeycloakBuilder.builder()
+                .serverUrl("http://localhost:8088/auth")
+                .realm(realm)
+                .clientId("admin-cli")
+                .grantType("password")
+                .username("abbes_kyrios")
+                .password("abbes")
+                .build();
+
+        UserResource userResource = keycloak.realm(realm).users().get(uuid);
+        UserRepresentation user = userResource.toRepresentation();
+        user.setEnabled(enable);
+        userResource.update(user);
+    }
+
 }

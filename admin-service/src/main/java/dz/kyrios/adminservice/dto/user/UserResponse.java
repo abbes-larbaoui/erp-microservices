@@ -17,6 +17,7 @@ public class UserResponse {
     private String email;
     private String firstName;
     private String lastName;
+    private Boolean actif;
 //    private Set<ProfileResponse> profileResponses;
 //    private ProfileResponse actifProfile;
 }

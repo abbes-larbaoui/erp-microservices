@@ -40,6 +40,7 @@ public class UserMapperImp implements UserMapper{
                 .email(request.getEmail())
                 .firstName(request.getFirstName())
                 .lastName((request.getLastName()))
+                .actif(request.getActif())
                 .build();
     }
 
@@ -56,6 +57,7 @@ public class UserMapperImp implements UserMapper{
                 .userName(entity.getUserName())
                 .firstName(entity.getFirstName())
                 .lastName(entity.getLastName())
+                .actif(entity.getActif())
 //                .actifProfile(profileMapper.entityToResponse(entity.getActifProfile()))
 //                .profileResponses(profileResponses)
                 .build();

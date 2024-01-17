@@ -14,4 +14,5 @@ public class UserRequest {
     private String email;
     private String firstName;
     private String lastName;
+    private Boolean actif;
 }

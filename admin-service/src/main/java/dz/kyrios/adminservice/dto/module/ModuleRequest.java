@@ -13,4 +13,5 @@ public class ModuleRequest {
     private String color;
     private String icon;
     private String uri;
+    private Boolean actif;
 }

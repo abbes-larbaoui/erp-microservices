@@ -10,4 +10,5 @@ import lombok.*;
 public class AuthorityTypeResponse {
     private Long id;
     private String libelle;
+    private Boolean actif;
 }

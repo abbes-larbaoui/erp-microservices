@@ -16,6 +16,7 @@ public class ModuleMapperImp implements ModuleMapper{
                 .color(request.getColor())
                 .icon(request.getIcon())
                 .uri(request.getUri())
+                .actif(request.getActif())
                 .build();
     }
 
@@ -27,6 +28,7 @@ public class ModuleMapperImp implements ModuleMapper{
                 .color(entity.getColor())
                 .icon(entity.getIcon())
                 .uri(entity.getUri())
+                .actif(entity.getActif())
                 .build();
     }
 }

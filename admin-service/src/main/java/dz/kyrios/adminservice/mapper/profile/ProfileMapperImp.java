@@ -66,6 +66,7 @@ public class ProfileMapperImp implements ProfileMapper{
                 .libelle(request.getLibelle())
                 .user(user)
                 .group(group)
+                .actif(request.getActif())
                 .build();
     }
 
@@ -91,6 +92,7 @@ public class ProfileMapperImp implements ProfileMapper{
                 .authorityResponses(authorityResponses)
                 .roleResponses(roleResponses)
                 .moduleResponses(moduleResponses)
+                .actif(entity.getActif())
                 .build();
     }
 }

@@ -14,4 +14,5 @@ public class AuthorityResponse {
     private String libelle;
     private AuthorityTypeResponse authorityTypeResponse;
     private ModuleResponse moduleResponse;
+    private Boolean actif;
 }

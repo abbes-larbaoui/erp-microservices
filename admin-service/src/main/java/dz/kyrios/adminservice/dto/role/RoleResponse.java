@@ -16,4 +16,5 @@ public class RoleResponse {
     private String libelle;
     private Set<AuthorityResponse> authorityResponses;
     private ModuleResponse moduleResponse;
+    private Boolean actif;
 }

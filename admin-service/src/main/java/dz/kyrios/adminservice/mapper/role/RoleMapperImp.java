@@ -39,6 +39,7 @@ public class RoleMapperImp implements RoleMapper{
                 .id(request.getId())
                 .module(module)
                 .libelle(request.getLibelle())
+                .actif(request.getActif())
                 .build();
     }
 
@@ -56,6 +57,7 @@ public class RoleMapperImp implements RoleMapper{
                 .libelle(entity.getLibelle())
                 .moduleResponse(moduleMapper.entityToResponse(entity.getModule()))
                 .authorityResponses(authorityResponses)
+                .actif(entity.getActif())
                 .build();
     }
 }

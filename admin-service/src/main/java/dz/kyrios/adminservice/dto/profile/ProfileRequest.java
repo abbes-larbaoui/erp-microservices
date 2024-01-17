@@ -12,4 +12,5 @@ public class ProfileRequest {
     private Long userId;
     private Long groupId;
     private String libelle;
+    private Boolean actif;
 }

@@ -22,4 +22,5 @@ public class ProfileResponse {
     private Set<ModuleResponse> moduleResponses;
     private Set<RoleResponse> roleResponses;
     private Set<AuthorityResponse> authorityResponses;
+    private Boolean actif;
 }

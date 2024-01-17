@@ -32,4 +32,7 @@ public class Authority implements Serializable {
     @ManyToOne
     @JoinColumn(name = "module_id", referencedColumnName = "id", nullable = false)
     private Module module;
+
+    @Column(name = "actif")
+    private Boolean actif = Boolean.TRUE;
 }

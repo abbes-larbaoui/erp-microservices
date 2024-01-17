@@ -12,6 +12,7 @@ public class GroupMapperImp implements GroupMapper{
         return Group.builder()
                 .id(request.getId())
                 .libelle(request.getLibelle())
+                .actif(request.getActif())
                 .build();
     }
 
@@ -20,6 +21,7 @@ public class GroupMapperImp implements GroupMapper{
         return GroupResponse.builder()
                 .id(entity.getId())
                 .libelle(entity.getLibelle())
+                .actif(entity.getActif())
                 .build();
     }
 }

@@ -11,4 +11,5 @@ public class RoleRequest {
     private Long id;
     private String libelle;
     private Long moduleId;
+    private Boolean actif;
 }

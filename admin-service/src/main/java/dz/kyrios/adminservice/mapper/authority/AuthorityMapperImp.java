@@ -45,6 +45,7 @@ public class AuthorityMapperImp implements AuthorityMapper{
                 .libelle(request.getLibelle())
                 .module(module)
                 .authorityType(authorityType)
+                .actif(request.getActif())
                 .build();
     }
 
@@ -55,6 +56,7 @@ public class AuthorityMapperImp implements AuthorityMapper{
                 .moduleResponse(moduleMapper.entityToResponse(entity.getModule()))
                 .libelle(entity.getLibelle())
                 .id(entity.getId())
+                .actif(entity.getActif())
                 .build();
     }
 }

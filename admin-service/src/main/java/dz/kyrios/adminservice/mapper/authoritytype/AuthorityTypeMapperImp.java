@@ -12,6 +12,7 @@ public class AuthorityTypeMapperImp implements AuthorityTypeMapper{
         return AuthorityType.builder()
                 .id(request.getId())
                 .libelle(request.getLibelle())
+                .actif(request.getActif())
                 .build();
     }
 
@@ -20,6 +21,7 @@ public class AuthorityTypeMapperImp implements AuthorityTypeMapper{
         return AuthorityTypeResponse.builder()
                 .id(entity.getId())
                 .libelle(entity.getLibelle())
+                .actif(entity.getActif())
                 .build();
     }
 }

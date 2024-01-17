@@ -12,4 +12,5 @@ public class AuthorityRequest {
     private String libelle;
     private Long authorityTypeId;
     private Long moduleId;
+    private Boolean actif;
 }

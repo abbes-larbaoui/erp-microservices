@@ -21,4 +21,7 @@ public class AuthorityType implements Serializable {
     @NotBlank
     @Column(name = "libelle", nullable = false)
     private String libelle;
+
+    @Column(name = "actif")
+    private Boolean actif = Boolean.TRUE;
 }

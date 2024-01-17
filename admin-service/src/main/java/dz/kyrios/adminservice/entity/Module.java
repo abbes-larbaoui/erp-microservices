@@ -33,4 +33,7 @@ public class Module implements Serializable {
     @NotBlank
     @Column(name = "uri", nullable = false)
     private String uri;
+
+    @Column(name = "actif")
+    private Boolean actif = Boolean.TRUE;
 }

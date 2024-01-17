@@ -1,17 +1,10 @@
 package dz.kyrios.adminservice.mapper.user;
 
-import dz.kyrios.adminservice.dto.profile.ProfileResponse;
 import dz.kyrios.adminservice.dto.user.UserCreateRequest;
 import dz.kyrios.adminservice.dto.user.UserRequest;
 import dz.kyrios.adminservice.dto.user.UserResponse;
 import dz.kyrios.adminservice.entity.User;
-import dz.kyrios.adminservice.mapper.profile.ProfileMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Component
 public class UserMapperImp implements UserMapper{

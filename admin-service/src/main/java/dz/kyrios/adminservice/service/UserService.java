@@ -3,12 +3,12 @@ package dz.kyrios.adminservice.service;
 import dz.kyrios.adminservice.config.exception.NotFoundException;
 import dz.kyrios.adminservice.config.filter.clause.Clause;
 import dz.kyrios.adminservice.config.filter.specification.GenericSpecification;
+import dz.kyrios.adminservice.dto.profile.ProfileRequest;
 import dz.kyrios.adminservice.dto.user.UserCreateRequest;
 import dz.kyrios.adminservice.dto.user.UserRequest;
 import dz.kyrios.adminservice.dto.user.UserResponse;
 import dz.kyrios.adminservice.entity.Profile;
 import dz.kyrios.adminservice.entity.User;
-import dz.kyrios.adminservice.enums.KeycloakRequiredAction;
 import dz.kyrios.adminservice.mapper.user.UserMapper;
 import dz.kyrios.adminservice.repository.ProfileRepository;
 import dz.kyrios.adminservice.repository.UserRepository;
@@ -90,7 +90,7 @@ public class UserService {
         User user = userMapper.requestToEntity(request);
         user.setUuid(uuid);
         defaultProfile.setUser(user);
-        user.setActifProfile(defaultProfile);
+        user.setDefaultProfile(defaultProfile);
         user.addProfile(defaultProfile);
 
          // Save the Profile, which also saves the User due to cascading
@@ -133,5 +133,54 @@ public class UserService {
         entity.setActif(enable);
 
         return userMapper.entityToResponse(entity);
+    }
+
+    public UserResponse addProfile(ProfileRequest request, Long profileTypeId) {
+        User user = userRepository.findById(request.getUserId())
+                .orElseThrow(() -> new NotFoundException(request.getUserId(), "User not found with id: "));
+
+        Profile profileType = profileRepository.findById(profileTypeId)
+                .orElseThrow(() -> new NotFoundException(profileTypeId, "Profile not found with id: "));
+
+        Profile profile = Profile.builder()
+                .user(user)
+                .group(profileType.getGroup())
+                .roles(profileType.getRoles())
+                .modules(profileType.getModules())
+                .authorities(profileType.getAuthorities())
+                .libelle(request.getLibelle())
+                .actif(request.getActif())
+                .build();
+
+        user.addProfile(profile);
+        return userMapper.entityToResponse(user);
+    }
+
+    public UserResponse changeDefaultProfile(Long userId, Long profileId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(userId, "User not found with id: "));
+
+        Profile profile = profileRepository.findById(profileId)
+                .orElseThrow(() -> new NotFoundException(profileId, "Profile not found with id: "));
+
+        if (!user.getProfiles().contains(profile)) {
+            throw new NotFoundException("User have not that profile");
+        }
+        user.setDefaultProfile(profile);
+        return userMapper.entityToResponse(user);
+    }
+
+    public void deleteProfile(Long id) {
+        Profile profile = profileRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(id, "Profile not found with id: "));
+
+        User user = userRepository.findById(profile.getUser().getId())
+                .orElseThrow(() -> new NotFoundException(profile.getUser().getId(), "User not found with id: "));
+
+        if (!user.getDefaultProfile().equals(profile)) {
+            profileRepository.delete(profile);
+        } else {
+            throw new RuntimeException("Can not remove the default profile");
+        }
     }
 }

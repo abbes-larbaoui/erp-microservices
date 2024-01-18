@@ -5,6 +5,7 @@ import dz.kyrios.adminservice.config.filter.clause.ClauseOneArg;
 import dz.kyrios.adminservice.config.filter.handlerMethodArgumentResolver.Critiria;
 import dz.kyrios.adminservice.config.filter.handlerMethodArgumentResolver.SearchValue;
 import dz.kyrios.adminservice.config.filter.handlerMethodArgumentResolver.SortParam;
+import dz.kyrios.adminservice.dto.profile.ProfileRequest;
 import dz.kyrios.adminservice.dto.user.UserCreateRequest;
 import dz.kyrios.adminservice.dto.user.UserRequest;
 import dz.kyrios.adminservice.dto.user.UserResponse;
@@ -81,5 +82,29 @@ public class UserController {
                                                           @PathVariable Long id) {
         UserResponse response = userService.enableDisableUser(id, request.getActif());
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/api/v1/user/profile/add-profile/{profileTypeId}")
+    public ResponseEntity<UserResponse> addProfile(@RequestBody ProfileRequest request,
+                                                   @PathVariable Long profileTypeId) {
+        UserResponse response = userService.addProfile(request, profileTypeId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping("/api/v1/user/profile/change-default-profile/{userId}/{profileId}")
+    public ResponseEntity<UserResponse> changeDefaultProfile(@PathVariable Long userId,
+                                                             @PathVariable Long profileId) {
+        UserResponse response = userService.changeDefaultProfile(userId, profileId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/api/v1/user/profile/{id}")
+    public ResponseEntity<Object> deleteProfile(@PathVariable Long id) {
+        try {
+            userService.deleteProfile(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

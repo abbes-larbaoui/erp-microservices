@@ -7,11 +7,10 @@ import dz.kyrios.adminservice.dto.profile.ProfileRequest;
 import dz.kyrios.adminservice.dto.user.UserCreateRequest;
 import dz.kyrios.adminservice.dto.user.UserRequest;
 import dz.kyrios.adminservice.dto.user.UserResponse;
-import dz.kyrios.adminservice.entity.Profile;
-import dz.kyrios.adminservice.entity.User;
+import dz.kyrios.adminservice.entity.*;
+import dz.kyrios.adminservice.entity.Module;
 import dz.kyrios.adminservice.mapper.user.UserMapper;
-import dz.kyrios.adminservice.repository.ProfileRepository;
-import dz.kyrios.adminservice.repository.UserRepository;
+import dz.kyrios.adminservice.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -32,6 +31,12 @@ public class UserService {
     private final UserRepository userRepository;
 
     private final ProfileRepository profileRepository;
+
+    private final ModuleRepository moduleRepository;
+
+    private final AuthorityRepository authorityRepository;
+
+    private final RoleRepository roleRepository;
     
     private final UserMapper userMapper;
 
@@ -39,10 +44,16 @@ public class UserService {
     public UserService(KeycloakService keycloakService,
                        UserRepository userRepository,
                        ProfileRepository profileRepository,
+                       ModuleRepository moduleRepository,
+                       AuthorityRepository authorityRepository,
+                       RoleRepository roleRepository,
                        UserMapper userMapper) {
         this.keycloakService = keycloakService;
         this.userRepository = userRepository;
         this.profileRepository = profileRepository;
+        this.moduleRepository = moduleRepository;
+        this.authorityRepository = authorityRepository;
+        this.roleRepository = roleRepository;
         this.userMapper = userMapper;
     }
 
@@ -182,5 +193,71 @@ public class UserService {
         } else {
             throw new RuntimeException("Can not remove the default profile");
         }
+    }
+
+    public UserResponse addModuleToProfile(Long profileId, Long moduleId) {
+        Profile profile = profileRepository.findById(profileId)
+                .orElseThrow(() -> new NotFoundException(profileId, "Profile not found with id: "));
+
+        Module module = moduleRepository.findById(moduleId)
+                .orElseThrow(() -> new NotFoundException(moduleId, "Module not found with id: "));
+
+        profile.addModule(module);
+        return userMapper.entityToResponse(profile.getUser());
+    }
+
+    public UserResponse removeModuleFromProfile(Long profileId, Long moduleId) {
+        Profile profile = profileRepository.findById(profileId)
+                .orElseThrow(() -> new NotFoundException(profileId, "Profile not found with id: "));
+
+        Module module = moduleRepository.findById(moduleId)
+                .orElseThrow(() -> new NotFoundException(moduleId, "Module not found with id: "));
+
+        profile.removeModule(module);
+        return userMapper.entityToResponse(profile.getUser());
+    }
+
+    public UserResponse addRoleToProfile(Long profileId, Long roleId) {
+        Profile profile = profileRepository.findById(profileId)
+                .orElseThrow(() -> new NotFoundException(profileId, "Profile not found with id: "));
+
+        Role role = roleRepository.findById(roleId)
+                .orElseThrow(() -> new NotFoundException(roleId, "Role not found with id: "));
+
+        profile.addRole(role);
+        return userMapper.entityToResponse(profile.getUser());
+    }
+
+    public UserResponse removeRoleFromProfile(Long profileId, Long roleId) {
+        Profile profile = profileRepository.findById(profileId)
+                .orElseThrow(() -> new NotFoundException(profileId, "Profile not found with id: "));
+
+        Role role = roleRepository.findById(roleId)
+                .orElseThrow(() -> new NotFoundException(roleId, "Role not found with id: "));
+
+        profile.removeRole(role);
+        return userMapper.entityToResponse(profile.getUser());
+    }
+
+    public UserResponse addAuthorityToProfile(Long profileId, Long authorityId) {
+        Profile profile = profileRepository.findById(profileId)
+                .orElseThrow(() -> new NotFoundException(profileId, "Profile not found with id: "));
+
+        Authority authority = authorityRepository.findById(authorityId)
+                .orElseThrow(() -> new NotFoundException(authorityId, "Authority not found with id: "));
+
+        profile.addAuthority(authority);
+        return userMapper.entityToResponse(profile.getUser());
+    }
+
+    public UserResponse removeAuthorityFromProfile(Long profileId, Long authorityId) {
+        Profile profile = profileRepository.findById(profileId)
+                .orElseThrow(() -> new NotFoundException(profileId, "Profile not found with id: "));
+
+        Authority authority = authorityRepository.findById(authorityId)
+                .orElseThrow(() -> new NotFoundException(authorityId, "Authority not found with id: "));
+
+        profile.removeAuthority(authority);
+        return userMapper.entityToResponse(profile.getUser());
     }
 }

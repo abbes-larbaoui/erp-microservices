@@ -107,4 +107,46 @@ public class UserController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PutMapping("/api/v1/user/profile/module/{profileId}/{moduleId}")
+    public ResponseEntity<UserResponse> addModuleToProfile(@PathVariable Long profileId,
+                                                             @PathVariable Long moduleId) {
+        UserResponse response = userService.addModuleToProfile(profileId, moduleId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/api/v1/user/profile/module/{profileId}/{moduleId}")
+    public ResponseEntity<UserResponse> removeModuleFromProfile(@PathVariable Long profileId,
+                                                           @PathVariable Long moduleId) {
+        UserResponse response = userService.removeModuleFromProfile(profileId, moduleId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping("/api/v1/user/profile/role/{profileId}/{roleId}")
+    public ResponseEntity<UserResponse> addRoleToProfile(@PathVariable Long profileId,
+                                                           @PathVariable Long roleId) {
+        UserResponse response = userService.addRoleToProfile(profileId, roleId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/api/v1/user/profile/role/{profileId}/{roleId}")
+    public ResponseEntity<UserResponse> removeRoleFromProfile(@PathVariable Long profileId,
+                                                                @PathVariable Long roleId) {
+        UserResponse response = userService.removeRoleFromProfile(profileId, roleId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping("/api/v1/user/profile/authority/{profileId}/{authorityId}")
+    public ResponseEntity<UserResponse> addAuthorityToProfile(@PathVariable Long profileId,
+                                                           @PathVariable Long authorityId) {
+        UserResponse response = userService.addAuthorityToProfile(profileId, authorityId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/api/v1/user/profile/authority/{profileId}/{authorityId}")
+    public ResponseEntity<UserResponse> removeAuthorityFromProfile(@PathVariable Long profileId,
+                                                                @PathVariable Long authorityId) {
+        UserResponse response = userService.removeAuthorityFromProfile(profileId, authorityId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

@@ -12,6 +12,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        session_factory:
+          interceptor: dz.kyrios.adminservice.config.auditlog.EntityChangeInterceptor
 server:
   port: 0
 eureka:

@@ -16,6 +16,15 @@ spring:
       hibernate:
         session_factory:
           interceptor: dz.kyrios.adminservice.config.auditlog.EntityChangeInterceptor
+  kafka:
+    bootstrap-servers: localhost:9092
+    template:
+      default-topic: auditLogTopic
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: event:dz.kyrios.adminservice.config.auditlog.EntityTrace
 server:
   port: 0
 eureka:

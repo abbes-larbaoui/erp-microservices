@@ -12,7 +12,7 @@ public class EntityTrace {
 
     private Long entityId;
 
-    private String operation;
+    private String action;
 
     private String data;
 
@@ -20,5 +20,5 @@ public class EntityTrace {
 
     private LocalDateTime timestamp;
 
-    private String module;
+    private String moduleName;
 }

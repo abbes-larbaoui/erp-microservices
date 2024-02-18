@@ -48,7 +48,7 @@ public class EntityChangeInterceptor extends EmptyInterceptor {
         Long entityId = getEntityId(entity);
         trace.setEntityId(entityId);
 
-        trace.setOperation(action);
+        trace.setAction(action);
         trace.setData(data);
 
         //TODO: change to the user when implement security

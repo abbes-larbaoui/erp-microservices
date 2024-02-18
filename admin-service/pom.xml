@@ -58,6 +58,14 @@
             <artifactId>keycloak-admin-client</artifactId>
             <version>17.0.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-messaging</artifactId>
+        </dependency>
 <!--        <dependency>-->
 <!--            <groupId>org.keycloak</groupId>-->
 <!--            <artifactId>keycloak-spring-boot-starter</artifactId>-->

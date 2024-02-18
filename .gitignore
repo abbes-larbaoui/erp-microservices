@@ -2,7 +2,5 @@
 /admin-service/target/
 /erp-api-gateway/target/
 /erp-discovery-server/target/
-/audit-log-service/dist
-/audit-log-service/node_modules
 /audit-log-service/node_modules/
 /audit-log-service/dist/

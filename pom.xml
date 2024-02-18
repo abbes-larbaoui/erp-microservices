@@ -19,6 +19,7 @@
         <module>admin-service</module>
         <module>erp-discovery-server</module>
         <module>erp-api-gateway</module>
+        <module>notification-service</module>
     </modules>
 
     <properties>

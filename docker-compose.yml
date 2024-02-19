@@ -5,6 +5,7 @@ volumes:
   admin-db-data:
   pgadmin-data:
   audit-log-data:
+  notification-db-data:
 
 services:
   keycloak-db:
@@ -48,6 +49,18 @@ services:
       POSTGRES_PASSWORD: abbes
     volumes:
       - admin-db-data:/var/lib/postgresql/data
+  notification-service-db:
+    image: postgres
+    container_name: notification-service-db
+    restart: always
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_DB: notification-db
+      POSTGRES_USER: abbes
+      POSTGRES_PASSWORD: abbes
+    volumes:
+      - notification-db-data:/var/lib/postgresql/data
   pgadmin:
     image: dpage/pgadmin4
     container_name: pgadmin4

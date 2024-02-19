@@ -9,6 +9,9 @@ import dz.kyrios.adminservice.dto.user.UserRequest;
 import dz.kyrios.adminservice.dto.user.UserResponse;
 import dz.kyrios.adminservice.entity.*;
 import dz.kyrios.adminservice.entity.Module;
+import dz.kyrios.adminservice.enums.NotificationChannel;
+import dz.kyrios.adminservice.enums.NotificationTemplateCode;
+import dz.kyrios.adminservice.event.notification.NotificationPayload;
 import dz.kyrios.adminservice.mapper.user.UserMapper;
 import dz.kyrios.adminservice.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +19,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -40,6 +46,8 @@ public class UserService {
     
     private final UserMapper userMapper;
 
+    private final KafkaTemplate<String, Object> kafkaTemplate;
+
     @Autowired
     public UserService(KeycloakService keycloakService,
                        UserRepository userRepository,
@@ -47,7 +55,8 @@ public class UserService {
                        ModuleRepository moduleRepository,
                        AuthorityRepository authorityRepository,
                        RoleRepository roleRepository,
-                       UserMapper userMapper) {
+                       UserMapper userMapper,
+                       KafkaTemplate<String, Object> kafkaTemplate) {
         this.keycloakService = keycloakService;
         this.userRepository = userRepository;
         this.profileRepository = profileRepository;
@@ -55,6 +64,7 @@ public class UserService {
         this.authorityRepository = authorityRepository;
         this.roleRepository = roleRepository;
         this.userMapper = userMapper;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     public PageImpl<UserResponse> findAllFilter(PageRequest pageRequest, List<Clause> filter) {
@@ -105,8 +115,26 @@ public class UserService {
         user.addProfile(defaultProfile);
 
          // Save the Profile, which also saves the User due to cascading
+        User createdUser = userRepository.save(user);
 
-        return userMapper.entityToResponse(userRepository.save(user));
+        // create user in microservices that needs
+        kafkaTemplate.send("userCreatedTopic", createdUser);
+
+        // notify user
+        notifyUser(createdUser);
+
+        return userMapper.entityToResponse(createdUser);
+    }
+
+    public void notifyUser(User user) {
+        NotificationPayload payload = new NotificationPayload();
+        payload.setUserUuid(user.getUuid());
+        payload.setChannel(NotificationChannel.EMAIL);
+        payload.setTemplateCode(NotificationTemplateCode.USER_CREATED_EMAIL);
+//        payload.setSubjectPlaceHolders();
+//        payload.setBodyPlaceHolders();
+        payload.setTime(LocalDateTime.now());
+        kafkaTemplate.send("notificationTopic", payload);
     }
 
     public void delete(Long id) {

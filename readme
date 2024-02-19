@@ -1,0 +1,1 @@
+to start audit-log service: set NODE_ENV=dev&npm start

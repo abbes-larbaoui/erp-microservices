@@ -1,9 +1,12 @@
 package dz.kyrios.notificationservice.service;
 
 import dz.kyrios.notificationservice.config.exception.NotFoundException;
+import dz.kyrios.notificationservice.config.filter.clause.Clause;
+import dz.kyrios.notificationservice.config.filter.specification.GenericSpecification;
 import dz.kyrios.notificationservice.dto.notificationtemplate.NotificationTemplateRequest;
 import dz.kyrios.notificationservice.dto.notificationtemplate.NotificationTemplateResponse;
 import dz.kyrios.notificationservice.entity.NotificationTemplate;
+import dz.kyrios.notificationservice.enums.NotificationTemplateCode;
 import dz.kyrios.notificationservice.mapper.notificationtemplate.NotificationTemplateMapper;
 import dz.kyrios.notificationservice.repository.NotificationTemplateRepository;
 import org.springframework.data.domain.Page;
@@ -29,22 +32,28 @@ public class NotificationTemplateService {
         this.notificationTemplateMapper = notificationTemplateMapper;
     }
 
-//    public PageImpl<AuthorityTypeResponse> findAllFilter(PageRequest pageRequest, List<Clause> filter) {
-//
-//        Specification<AuthorityType> specification = new GenericSpecification<>(filter);
-//        List<AuthorityTypeResponse> authorityTypeResponseList;
-//        Page<AuthorityType> page;
-//        page = notificationTemplateRepository.findAll(specification, pageRequest);
-//
-//        authorityTypeResponseList = page.getContent().stream()
-//                .map(notificationTemplateMapper::entityToResponse)
-//                .collect(Collectors.toList());
-//        return new PageImpl<>(authorityTypeResponseList, pageRequest, page.getTotalElements());
-//    }
+    public PageImpl<NotificationTemplateResponse> findAllFilter(PageRequest pageRequest, List<Clause> filter) {
+
+        Specification<NotificationTemplate> specification = new GenericSpecification<>(filter);
+        List<NotificationTemplateResponse> notificationTemplateResponseList;
+        Page<NotificationTemplate> page;
+        page = notificationTemplateRepository.findAll(specification, pageRequest);
+
+        notificationTemplateResponseList = page.getContent().stream()
+                .map(notificationTemplateMapper::entityToResponse)
+                .collect(Collectors.toList());
+        return new PageImpl<>(notificationTemplateResponseList, pageRequest, page.getTotalElements());
+    }
 
     public NotificationTemplateResponse getOne(Long id) {
         NotificationTemplate notificationTemplate = notificationTemplateRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(id, "Notification Template not found with id: "));
+        return notificationTemplateMapper.entityToResponse(notificationTemplate);
+    }
+
+    public NotificationTemplateResponse getOneByCode(NotificationTemplateCode code) {
+        NotificationTemplate notificationTemplate = notificationTemplateRepository.findByTemplateCode(code)
+                .orElseThrow(() -> new NotFoundException("Notification Template not found with code: " + code));
         return notificationTemplateMapper.entityToResponse(notificationTemplate);
     }
 

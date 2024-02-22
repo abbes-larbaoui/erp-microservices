@@ -12,6 +12,7 @@ import dz.kyrios.adminservice.entity.Module;
 import dz.kyrios.adminservice.enums.NotificationChannel;
 import dz.kyrios.adminservice.enums.NotificationTemplateCode;
 import dz.kyrios.adminservice.event.notification.NotificationPayload;
+import dz.kyrios.adminservice.event.user.UserCreatedEvent;
 import dz.kyrios.adminservice.mapper.user.UserMapper;
 import dz.kyrios.adminservice.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,9 +117,16 @@ public class UserService {
 
          // Save the Profile, which also saves the User due to cascading
         User createdUser = userRepository.save(user);
-
+        UserCreatedEvent userCreatedEvent = UserCreatedEvent.builder()
+                .uuid(createdUser.getUuid())
+                .userName(createdUser.getUserName())
+                .email(createdUser.getEmail())
+                .phoneNumber(createdUser.getPhoneNumber())
+                .firstName(createdUser.getFirstName())
+                .lastName(createdUser.getLastName())
+                .build();
         // create user in microservices that needs
-        kafkaTemplate.send("userCreatedTopic", createdUser);
+        kafkaTemplate.send("userCreatedTopic", userCreatedEvent);
 
         // notify user
         notifyUser(createdUser);

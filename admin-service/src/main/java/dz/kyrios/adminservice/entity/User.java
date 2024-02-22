@@ -1,5 +1,6 @@
 package dz.kyrios.adminservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -29,6 +30,9 @@ public class User implements Serializable {
 
     @Column(name = "email")
     private String email;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
 
     @Column(name = "first_name")
     private String firstName;

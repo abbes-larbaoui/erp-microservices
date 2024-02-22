@@ -12,6 +12,15 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: notificationId
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+#        spring.json.trusted.packages: "dz.kyrios.adminservice.entity.User"
+        spring.json.type.mapping: userCreatedEvent:dz.kyrios.notificationservice.entity.User,notificationEvent:dz.kyrios.notificationservice.event.notification.NotificationPayload,notificationPlaceHolder:dz.kyrios.notificationservice.event.notification.PlaceHolder
 server:
   port: 0
 eureka:

@@ -1,11 +1,10 @@
-package dz.kyrios.adminservice.event.notification;
+package dz.kyrios.notificationservice.event.notification;
 
-import dz.kyrios.adminservice.enums.NotificationChannel;
-import dz.kyrios.adminservice.enums.NotificationTemplateCode;
+import dz.kyrios.notificationservice.enums.NotificationChannel;
+import dz.kyrios.notificationservice.enums.NotificationTemplateCode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 

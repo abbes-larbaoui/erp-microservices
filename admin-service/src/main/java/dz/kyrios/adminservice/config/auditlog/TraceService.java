@@ -12,7 +12,7 @@ public class TraceService {
 
     public void saveTrace(EntityTrace trace) {
         trace.setModuleName("ADMIN");
-        System.out.println(trace);
+//        System.out.println(trace);
 
         //TODO: send audit data to audit-log-service
         kafkaTemplate.send("auditLogTopic", trace);

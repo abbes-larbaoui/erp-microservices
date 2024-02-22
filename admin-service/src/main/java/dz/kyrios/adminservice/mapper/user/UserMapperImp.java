@@ -21,6 +21,7 @@ public class UserMapperImp implements UserMapper{
         return User.builder()
                 .userName(request.getUserName())
                 .email(request.getEmail())
+                .phoneNumber(request.getPhoneNumber())
                 .firstName(request.getFirstName())
                 .lastName((request.getLastName()))
                 .build();
@@ -31,6 +32,7 @@ public class UserMapperImp implements UserMapper{
         return User.builder()
                 .userName(request.getUserName())
                 .email(request.getEmail())
+                .phoneNumber(request.getPhoneNumber())
                 .firstName(request.getFirstName())
                 .lastName((request.getLastName()))
                 .actif(request.getActif())
@@ -47,6 +49,7 @@ public class UserMapperImp implements UserMapper{
                 .id(entity.getId())
                 .uuid(entity.getUuid())
                 .email(entity.getEmail())
+                .phoneNumber(entity.getPhoneNumber())
                 .userName(entity.getUserName())
                 .firstName(entity.getFirstName())
                 .lastName(entity.getLastName())

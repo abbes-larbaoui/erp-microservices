@@ -24,7 +24,8 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       properties:
-        spring.json.type.mapping: event:dz.kyrios.adminservice.config.auditlog.EntityTrace
+        spring.json.addtypeheaders: false
+        spring.json.type.mapping: userCreatedEvent:dz.kyrios.adminservice.event.user.UserCreatedEvent,event:dz.kyrios.adminservice.config.auditlog.EntityTrace,notificationEvent:dz.kyrios.adminservice.event.notification.NotificationPayload,notificationPlaceHolder:dz.kyrios.adminservice.event.notification.PlaceHolder
 server:
   port: 0
 eureka:

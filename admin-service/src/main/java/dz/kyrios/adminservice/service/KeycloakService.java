@@ -55,8 +55,10 @@ public class KeycloakService {
         credentialRepresentation.setValue(request.getPassword());
         credentialRepresentation.setTemporary(request.getTemporary());
         userRepresentation.setCredentials(Collections.singletonList(credentialRepresentation));
-        userRepresentation.getRequiredActions()
-                .addAll(request.getRequiredActions().stream().map(Enum::toString).toList());
+        if (request.getRequiredActions() != null) {
+            userRepresentation.getRequiredActions()
+                    .addAll(request.getRequiredActions().stream().map(Enum::toString).toList());
+        }
 
         Response response = keycloak.realm(realm).users().create(userRepresentation);
 

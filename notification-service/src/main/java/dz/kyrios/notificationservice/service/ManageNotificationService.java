@@ -1,13 +1,18 @@
 package dz.kyrios.notificationservice.service;
 
 import dz.kyrios.notificationservice.entity.Notification;
+import dz.kyrios.notificationservice.entity.User;
+import dz.kyrios.notificationservice.enums.NotificationChannel;
 import dz.kyrios.notificationservice.enums.NotificationStatus;
 import dz.kyrios.notificationservice.event.notification.NotificationPayload;
 import dz.kyrios.notificationservice.event.notification.PlaceHolder;
+import dz.kyrios.notificationservice.repository.NotificationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,26 +29,30 @@ public class ManageNotificationService {
 
     private final SmsService smsService;
 
+    private final NotificationRepository notificationRepository;
+
     public ManageNotificationService(NotificationTemplateService notificationTemplateService,
                                      UserService userService,
                                      EmailService emailService,
-                                     SmsService smsService) {
+                                     SmsService smsService,
+                                     NotificationRepository notificationRepository) {
         this.notificationTemplateService = notificationTemplateService;
         this.userService = userService;
         this.emailService = emailService;
         this.smsService = smsService;
+        this.notificationRepository = notificationRepository;
     }
 
     public void notification(NotificationPayload payload) {
         String subject;
         String body;
-        if (payload.getSubjectPlaceHolders()!=null) {
-            subject = replacePlaceholders(notificationTemplateService.getOneByCode(payload.getTemplateCode()).getSubject() ,payload.getSubjectPlaceHolders());
+        if (payload.getSubjectPlaceHolders() != null) {
+            subject = replacePlaceholders(notificationTemplateService.getOneByCode(payload.getTemplateCode()).getSubject(), payload.getSubjectPlaceHolders());
         } else {
             subject = notificationTemplateService.getOneByCode(payload.getTemplateCode()).getSubject();
         }
-        if (payload.getBodyPlaceHolders()!=null) {
-            body = replacePlaceholders(notificationTemplateService.getOneByCode(payload.getTemplateCode()).getBody() ,payload.getBodyPlaceHolders());
+        if (payload.getBodyPlaceHolders() != null) {
+            body = replacePlaceholders(notificationTemplateService.getOneByCode(payload.getTemplateCode()).getBody(), payload.getBodyPlaceHolders());
         } else {
             body = notificationTemplateService.getOneByCode(payload.getTemplateCode()).getBody();
         }
@@ -77,6 +86,13 @@ public class ManageNotificationService {
     private void pushNotification(Notification notification) {
         log.info("New notification pushed - {}", notification.getSubject());
         log.info("Body - {}", notification.getBody());
+    }
+
+    public Integer getNotSeenNotificationNumber(User user) {
+        List<NotificationChannel> channels = new ArrayList<>();
+        channels.add(NotificationChannel.IN_APP);
+        channels.add(NotificationChannel.ALL);
+        return notificationRepository.countByStatusAndUserAndNotificationChannelIn(NotificationStatus.SENT, user, channels);
     }
 
     public static String replacePlaceholders(String inputString, PlaceHolder[] replacements) {

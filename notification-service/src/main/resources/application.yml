@@ -12,6 +12,14 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: abbemeiouna@gmail.com
+    password: wmxp tqqp ypni gzbi
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
   kafka:
     bootstrap-servers: localhost:9092
     consumer:

@@ -4,3 +4,4 @@
 /erp-discovery-server/target/
 /audit-log-service/node_modules/
 /audit-log-service/dist/
+/notification-service/target/

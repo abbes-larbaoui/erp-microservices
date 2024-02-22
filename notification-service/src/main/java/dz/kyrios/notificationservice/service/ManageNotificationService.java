@@ -1,5 +1,6 @@
 package dz.kyrios.notificationservice.service;
 
+import dz.kyrios.notificationservice.config.exception.NotFoundException;
 import dz.kyrios.notificationservice.entity.Notification;
 import dz.kyrios.notificationservice.entity.User;
 import dz.kyrios.notificationservice.enums.NotificationChannel;
@@ -93,6 +94,11 @@ public class ManageNotificationService {
         channels.add(NotificationChannel.IN_APP);
         channels.add(NotificationChannel.ALL);
         return notificationRepository.countByStatusAndUserAndNotificationChannelIn(NotificationStatus.SENT, user, channels);
+    }
+
+    public void seenNotification(Long id) {
+        Notification notification = notificationRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(id, "Notification not found with id: "));
     }
 
     public static String replacePlaceholders(String inputString, PlaceHolder[] replacements) {

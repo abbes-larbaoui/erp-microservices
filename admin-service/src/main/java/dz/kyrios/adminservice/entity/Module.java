@@ -19,8 +19,12 @@ public class Module implements Serializable {
     private Long id;
 
     @NotBlank
-    @Column(name = "module_name", nullable = false)
+    @Column(name = "module_name", nullable = false, unique = true)
     private String moduleName;
+
+    @NotBlank
+    @Column(name = "module_code", nullable = false, unique = true)
+    private String moduleCode;
 
     @NotBlank
     @Column(name = "color", nullable = false)

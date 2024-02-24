@@ -1,4 +1,4 @@
-package dz.kyrios.notificationservice.config.security;
+package dz.kyrios.adminservice.config.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;

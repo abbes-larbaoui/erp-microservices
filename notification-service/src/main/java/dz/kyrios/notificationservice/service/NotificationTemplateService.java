@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +33,7 @@ public class NotificationTemplateService {
         this.notificationTemplateMapper = notificationTemplateMapper;
     }
 
+    @PreAuthorize("hasCustomAuthority('NOTIFICATION_TEMPLATE_LIST')")
     public PageImpl<NotificationTemplateResponse> findAllFilter(PageRequest pageRequest, List<Clause> filter) {
 
         Specification<NotificationTemplate> specification = new GenericSpecification<>(filter);
@@ -45,6 +47,7 @@ public class NotificationTemplateService {
         return new PageImpl<>(notificationTemplateResponseList, pageRequest, page.getTotalElements());
     }
 
+    @PreAuthorize("hasCustomAuthority('MY_CUSTOM_AUTHORITY')")
     public NotificationTemplateResponse getOne(Long id) {
         NotificationTemplate notificationTemplate = notificationTemplateRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(id, "Notification Template not found with id: "));

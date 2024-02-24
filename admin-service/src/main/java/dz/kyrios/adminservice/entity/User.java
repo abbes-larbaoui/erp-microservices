@@ -48,7 +48,7 @@ public class User implements Serializable {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "profile_id", referencedColumnName = "id")
-    private Profile defaultProfile;
+    private Profile actifProfile;
 
     public void addProfile(Profile profile) {
         if (this.getProfiles() != null && !this.getProfiles().isEmpty()) {

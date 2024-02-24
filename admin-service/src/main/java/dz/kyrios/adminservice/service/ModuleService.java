@@ -53,6 +53,11 @@ public class ModuleService {
         return moduleMapper.entityToResponse(module);
     }
 
+    public Module getOneBycode(String code) {
+        return moduleRepository.findByModuleCode(code)
+                .orElseThrow(() -> new NotFoundException("Module not found with code: " + code));
+    }
+
     public ModuleResponse create(ModuleRequest request) {
         Module created = moduleRepository.save(moduleMapper.requestToEntity(request));
         return moduleMapper.entityToResponse(created);

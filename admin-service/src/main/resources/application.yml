@@ -4,6 +4,11 @@ spring:
     allow-circular-references: true
   application:
     name: admin-service
+  security:
+    oauth2:
+      resource-server:
+        jwt:
+          issuer-uri: http://localhost:8088/auth/realms/erp-dev
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/admin-db
@@ -38,6 +43,10 @@ eureka:
 #  auth-server-url: http://localhost:8088/auth
 #  realm: erp-dev
 #  resource: admin-service
+#  use-resource-role-mappings: false
+#  bearer-only: true
+#  public-client: true
+#  principal-attribute: preferred_username
 
 app:
   realm: erp-dev

@@ -87,6 +87,12 @@ public class UserService {
         return userMapper.entityToResponse(user);
     }
 
+    public User getOneByUsername(String username) {
+        User user = userRepository.findByUserName(username)
+                .orElseThrow(() -> new NotFoundException("User not found with username: " + username));
+        return user;
+    }
+
     public UserResponse create(UserCreateRequest request, Long profileTypeId) {
         String uuid = keycloakService.createUser(request);
         if (uuid == null || uuid.isEmpty()) {
@@ -112,7 +118,7 @@ public class UserService {
         User user = userMapper.requestToEntity(request);
         user.setUuid(uuid);
         defaultProfile.setUser(user);
-        user.setDefaultProfile(defaultProfile);
+        user.setActifProfile(defaultProfile);
         user.addProfile(defaultProfile);
 
          // Save the Profile, which also saves the User due to cascading
@@ -203,7 +209,7 @@ public class UserService {
         return userMapper.entityToResponse(user);
     }
 
-    public UserResponse changeDefaultProfile(Long userId, Long profileId) {
+    public UserResponse changeActifProfile(Long userId, Long profileId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(userId, "User not found with id: "));
 
@@ -213,7 +219,7 @@ public class UserService {
         if (!user.getProfiles().contains(profile)) {
             throw new NotFoundException("User have not that profile");
         }
-        user.setDefaultProfile(profile);
+        user.setActifProfile(profile);
         return userMapper.entityToResponse(user);
     }
 
@@ -224,7 +230,7 @@ public class UserService {
         User user = userRepository.findById(profile.getUser().getId())
                 .orElseThrow(() -> new NotFoundException(profile.getUser().getId(), "User not found with id: "));
 
-        if (!user.getDefaultProfile().equals(profile)) {
+        if (!user.getActifProfile().equals(profile)) {
             profileRepository.delete(profile);
         } else {
             throw new RuntimeException("Can not remove the default profile");

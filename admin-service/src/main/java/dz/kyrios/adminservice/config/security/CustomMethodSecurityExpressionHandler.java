@@ -1,10 +1,10 @@
-package dz.kyrios.notificationservice.config.security;
+package dz.kyrios.adminservice.config.security;
 
+import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
 import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
 import org.springframework.security.core.Authentication;
-import org.aopalliance.intercept.MethodInvocation;
 
 public class CustomMethodSecurityExpressionHandler extends DefaultMethodSecurityExpressionHandler {
     @Override

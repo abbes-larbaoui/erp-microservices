@@ -10,6 +10,7 @@ import lombok.*;
 public class ModuleResponse {
     private Long id;
     private String moduleName;
+    private String moduleCode;
     private String color;
     private String icon;
     private String uri;

@@ -89,4 +89,9 @@ public class AuthorityService {
                 .orElseThrow(() -> new NotFoundException(id, "Authority not found with id: "));
         authorityRepository.delete(entity);
     }
+
+    public Authority getAuthorityByLibelleAndModule(String libelle, String moduleCode) {
+        return authorityRepository.findByLibelleAndModule_ModuleCode(libelle, moduleCode)
+                .orElseThrow(() -> new NotFoundException("Authority not found with name: " + libelle + " in module: " + moduleCode));
+    }
 }

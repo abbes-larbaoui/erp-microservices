@@ -92,9 +92,9 @@ public class UserController {
     }
 
     @PutMapping("/api/v1/user/profile/change-default-profile/{userId}/{profileId}")
-    public ResponseEntity<UserResponse> changeDefaultProfile(@PathVariable Long userId,
+    public ResponseEntity<UserResponse> changeActifProfile(@PathVariable Long userId,
                                                              @PathVariable Long profileId) {
-        UserResponse response = userService.changeDefaultProfile(userId, profileId);
+        UserResponse response = userService.changeActifProfile(userId, profileId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

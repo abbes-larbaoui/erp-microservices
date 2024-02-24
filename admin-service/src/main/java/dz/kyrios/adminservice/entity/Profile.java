@@ -6,6 +6,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -30,13 +31,13 @@ public class Profile implements Serializable {
     private User user;
 
     @ManyToMany
-    private Set<Module> modules;
+    private Set<Module> modules = new HashSet<>();
 
     @ManyToMany
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     @ManyToMany
-    private Set<Authority> authorities;
+    private Set<Authority> authorities = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "group_id", referencedColumnName = "id")

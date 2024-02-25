@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class NotificationTemplateController {
     }
 
     @GetMapping("/api/v1/notification-template")
+    @PreAuthorize("hasCustomAuthority('NOTIFICATION_TEMPLATE_LIST')")
     public PageImpl<NotificationTemplateResponse> getAllFilter(@SortParam PageRequest pageRequest,
                                                                @Critiria List<Clause> filter,
                                                                @SearchValue ClauseOneArg searchValue) {
@@ -34,24 +36,28 @@ public class NotificationTemplateController {
     }
 
     @GetMapping("/api/v1/notification-template/{id}")
+    @PreAuthorize("hasCustomAuthority('NOTIFICATION_TEMPLATE_VIEW')")
     public ResponseEntity<NotificationTemplateResponse> getOne(@PathVariable Long id) {
         NotificationTemplateResponse response = notificationTemplateService.getOne(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/api/v1/notification-template")
+    @PreAuthorize("hasCustomAuthority('NOTIFICATION_TEMPLATE_CREATE')")
     public ResponseEntity<NotificationTemplateResponse> create(@RequestBody NotificationTemplateRequest request) {
         NotificationTemplateResponse response = notificationTemplateService.create(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping("/api/v1/notification-template/{id}")
+    @PreAuthorize("hasCustomAuthority('NOTIFICATION_TEMPLATE_UPDATE')")
     public ResponseEntity<NotificationTemplateResponse> update(@RequestBody NotificationTemplateRequest request,@PathVariable Long id) {
         NotificationTemplateResponse response = notificationTemplateService.update(request, id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/api/v1/notification-template/{id}")
+    @PreAuthorize("hasCustomAuthority('NOTIFICATION_TEMPLATE_DELETE')")
     public ResponseEntity<Object> delete(@PathVariable Long id) {
         try {
             notificationTemplateService.delete(id);

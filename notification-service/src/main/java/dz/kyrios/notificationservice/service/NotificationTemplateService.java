@@ -33,7 +33,6 @@ public class NotificationTemplateService {
         this.notificationTemplateMapper = notificationTemplateMapper;
     }
 
-    @PreAuthorize("hasCustomAuthority('NOTIFICATION_TEMPLATE_LIST')")
     public PageImpl<NotificationTemplateResponse> findAllFilter(PageRequest pageRequest, List<Clause> filter) {
 
         Specification<NotificationTemplate> specification = new GenericSpecification<>(filter);
@@ -47,7 +46,7 @@ public class NotificationTemplateService {
         return new PageImpl<>(notificationTemplateResponseList, pageRequest, page.getTotalElements());
     }
 
-    @PreAuthorize("hasCustomAuthority('MY_CUSTOM_AUTHORITY')")
+
     public NotificationTemplateResponse getOne(Long id) {
         NotificationTemplate notificationTemplate = notificationTemplateRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(id, "Notification Template not found with id: "));

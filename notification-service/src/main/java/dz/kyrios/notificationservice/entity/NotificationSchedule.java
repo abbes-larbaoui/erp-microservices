@@ -1,6 +1,7 @@
 package dz.kyrios.notificationservice.entity;
 
 import dz.kyrios.notificationservice.enums.NotificationChannel;
+import dz.kyrios.notificationservice.enums.NotificationScheduleStatus;
 import dz.kyrios.notificationservice.enums.NotificationStatus;
 import lombok.*;
 
@@ -13,8 +14,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "notification")
-public class Notification implements Serializable {
+@Entity(name = "notification_schedule")
+public class NotificationSchedule implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -37,6 +39,6 @@ public class Notification implements Serializable {
     private LocalDateTime notificationTime;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "notification_status", nullable = false)
-    private NotificationStatus status;
+    @Column(name = "notification_schedule_status", nullable = false)
+    private NotificationScheduleStatus status;
 }

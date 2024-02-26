@@ -2,13 +2,20 @@ package dz.kyrios.notificationservice.service;
 
 import dz.kyrios.notificationservice.config.exception.NotFoundException;
 import dz.kyrios.notificationservice.entity.Notification;
+import dz.kyrios.notificationservice.entity.NotificationSchedule;
 import dz.kyrios.notificationservice.entity.User;
 import dz.kyrios.notificationservice.enums.NotificationChannel;
+import dz.kyrios.notificationservice.enums.NotificationScheduleStatus;
 import dz.kyrios.notificationservice.enums.NotificationStatus;
 import dz.kyrios.notificationservice.event.notification.NotificationPayload;
 import dz.kyrios.notificationservice.event.notification.PlaceHolder;
 import dz.kyrios.notificationservice.repository.NotificationRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +31,8 @@ public class ManageNotificationService {
 
     private final NotificationTemplateService notificationTemplateService;
 
+    private final NotificationScheduleService notificationScheduleService;
+
     private final UserService userService;
 
     private final EmailService emailService;
@@ -33,11 +42,13 @@ public class ManageNotificationService {
     private final NotificationRepository notificationRepository;
 
     public ManageNotificationService(NotificationTemplateService notificationTemplateService,
+                                     NotificationScheduleService notificationScheduleService,
                                      UserService userService,
                                      EmailService emailService,
                                      SmsService smsService,
                                      NotificationRepository notificationRepository) {
         this.notificationTemplateService = notificationTemplateService;
+        this.notificationScheduleService = notificationScheduleService;
         this.userService = userService;
         this.emailService = emailService;
         this.smsService = smsService;
@@ -65,12 +76,16 @@ public class ManageNotificationService {
                 .notificationTime(payload.getTime())
                 .status(NotificationStatus.SENT)
                 .build();
+        Notification entity = notificationRepository.save(notification);
+        pushNotification(entity);
+    }
 
+    private void pushNotification(Notification notification) {
         switch (notification.getNotificationChannel()) {
             case ALL -> {
                 emailService.sendEmail(notification);
                 smsService.sendSms(notification);
-                pushNotification(notification);
+                inAppNotification(notification);
             }
             case EMAIL -> {
                 emailService.sendEmail(notification);
@@ -79,17 +94,25 @@ public class ManageNotificationService {
                 smsService.sendSms(notification);
             }
             case IN_APP -> {
-                pushNotification(notification);
+                inAppNotification(notification);
             }
         }
     }
 
-    private void pushNotification(Notification notification) {
+    // TODO: implimentation of in app notification
+    private void inAppNotification(Notification notification) {
         log.info("New notification pushed - {}", notification.getSubject());
         log.info("Body - {}", notification.getBody());
     }
 
-    public Integer getNotSeenNotificationNumber(User user) {
+    public Integer getNotSeenNotificationNumber() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        JwtAuthenticationToken jwtAuthentication = (JwtAuthenticationToken) authentication;
+        Jwt jwt = jwtAuthentication.getToken();
+
+        String username = (String) jwt.getClaims().get("preferred_username");
+        User user = userService.getByUsername(username);
+
         List<NotificationChannel> channels = new ArrayList<>();
         channels.add(NotificationChannel.IN_APP);
         channels.add(NotificationChannel.ALL);
@@ -128,5 +151,36 @@ public class ManageNotificationService {
             }
         }
         return null;
+    }
+
+    // send scheduled notifications
+    @Scheduled(fixedRate = 300000) /* Check every 5 minutes for new notifications */
+    public void checkForScheduledNotifications() {
+        log.warn("Schedule excuted ===================");
+        List<NotificationSchedule> pendingNotifications = notificationScheduleService.fetchPendingNotifications();
+
+        for (NotificationSchedule notificationSchedule : pendingNotifications) {
+            /* save the notification in db */
+            Notification entity = notificationRepository.save(notificationScheduleToNotification(notificationSchedule));
+
+            /* edit status of scheduled notification to SENT */
+            notificationScheduleService.getEntity(notificationSchedule.getId()).setStatus(NotificationScheduleStatus.SENT);
+
+            /* push the notification */
+            pushNotification(entity);
+
+            log.warn("notification sent ===================");
+        }
+    }
+
+    public Notification notificationScheduleToNotification(NotificationSchedule schedule) {
+        return Notification.builder()
+                .notificationChannel(schedule.getNotificationChannel())
+                .user(schedule.getUser())
+                .notificationTime(schedule.getNotificationTime())
+                .subject(schedule.getSubject())
+                .body(schedule.getBody())
+                .status(NotificationStatus.SENT)
+                .build();
     }
 }

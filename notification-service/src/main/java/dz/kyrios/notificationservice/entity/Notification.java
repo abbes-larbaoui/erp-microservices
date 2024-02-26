@@ -30,7 +30,7 @@ public class Notification implements Serializable {
     @Column(name = "subject")
     private String subject;
 
-    @Column(name = "body")
+    @Column(name = "body", columnDefinition = "TEXT")
     private String body;
 
     @Column(name = "notification_time")

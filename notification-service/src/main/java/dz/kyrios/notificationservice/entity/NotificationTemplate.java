@@ -24,7 +24,7 @@ public class NotificationTemplate implements Serializable {
     @Column(name = "subject")
     private String subject;
 
-    @Column(name = "body", nullable = false)
+    @Column(name = "body", columnDefinition = "TEXT not null")
     private String body;
 
     @Column(name = "actif")

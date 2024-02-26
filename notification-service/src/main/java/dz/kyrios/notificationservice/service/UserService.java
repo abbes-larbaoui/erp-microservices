@@ -28,4 +28,9 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("User not found with uuid: " + uuid));
         return user;
     }
+
+    public User getByUsername(String username) {
+        return userRepository.findByUserName(username)
+                .orElseThrow(() -> new NotFoundException("User not found with username: " + username));
+    }
 }

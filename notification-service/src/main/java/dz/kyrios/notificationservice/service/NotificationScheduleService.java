@@ -61,6 +61,11 @@ public class NotificationScheduleService {
         return notificationScheduleMapper.entityToResponse(notificationTemplate);
     }
 
+    public NotificationSchedule getEntity(Long id) {
+        return notificationScheduleRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(id, "Notification Schedule not found with id: "));
+    }
+
     public NotificationScheduleResponse create(NotificationScheduleRequest request) {
         if (request.getNotificationTime().isAfter(LocalDateTime.now())) {
             NotificationSchedule entity = notificationScheduleMapper.requestToEntity(request);
@@ -97,6 +102,10 @@ public class NotificationScheduleService {
         notificationScheduleRepository.delete(entity);
     }
 
-    // TODO: add schedule method the send notification
+    // fetch scheduled notification that will send in the next 5 minutes
+    public List<NotificationSchedule> fetchPendingNotifications() {
+        return notificationScheduleRepository.
+                findByNotificationTimeGreaterThanEqualAndNotificationTimeLessThanEqualAndStatus(LocalDateTime.now(), LocalDateTime.now().plusMinutes(5), NotificationScheduleStatus.EN_ATTENTE);
+    }
 
 }

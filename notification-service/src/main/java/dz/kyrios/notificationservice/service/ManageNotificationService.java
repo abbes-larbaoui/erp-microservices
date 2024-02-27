@@ -1,6 +1,12 @@
 package dz.kyrios.notificationservice.service;
 
 import dz.kyrios.notificationservice.config.exception.NotFoundException;
+import dz.kyrios.notificationservice.config.filter.clause.Clause;
+import dz.kyrios.notificationservice.config.filter.clause.ClauseArrayArgs;
+import dz.kyrios.notificationservice.config.filter.clause.ClauseOneArg;
+import dz.kyrios.notificationservice.config.filter.enums.Operation;
+import dz.kyrios.notificationservice.config.filter.specification.GenericSpecification;
+import dz.kyrios.notificationservice.dto.notification.NotificationResponse;
 import dz.kyrios.notificationservice.entity.Notification;
 import dz.kyrios.notificationservice.entity.NotificationSchedule;
 import dz.kyrios.notificationservice.entity.User;
@@ -9,8 +15,13 @@ import dz.kyrios.notificationservice.enums.NotificationScheduleStatus;
 import dz.kyrios.notificationservice.enums.NotificationStatus;
 import dz.kyrios.notificationservice.event.notification.NotificationPayload;
 import dz.kyrios.notificationservice.event.notification.PlaceHolder;
+import dz.kyrios.notificationservice.mapper.notification.NotificationMapper;
 import dz.kyrios.notificationservice.repository.NotificationRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -32,6 +44,8 @@ public class ManageNotificationService {
     private final NotificationTemplateService notificationTemplateService;
 
     private final NotificationScheduleService notificationScheduleService;
+
+    private final NotificationMapper notificationMapper;
 
     private final UserService userService;
 
@@ -43,12 +57,14 @@ public class ManageNotificationService {
 
     public ManageNotificationService(NotificationTemplateService notificationTemplateService,
                                      NotificationScheduleService notificationScheduleService,
+                                     NotificationMapper notificationMapper,
                                      UserService userService,
                                      EmailService emailService,
                                      SmsService smsService,
                                      NotificationRepository notificationRepository) {
         this.notificationTemplateService = notificationTemplateService;
         this.notificationScheduleService = notificationScheduleService;
+        this.notificationMapper = notificationMapper;
         this.userService = userService;
         this.emailService = emailService;
         this.smsService = smsService;
@@ -117,6 +133,33 @@ public class ManageNotificationService {
         channels.add(NotificationChannel.IN_APP);
         channels.add(NotificationChannel.ALL);
         return notificationRepository.countByStatusAndUserAndNotificationChannelIn(NotificationStatus.SENT, user, channels);
+    }
+
+    public PageImpl<NotificationResponse> findAllFilterForUser(PageRequest pageRequest, List<Clause> filter) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        JwtAuthenticationToken jwtAuthentication = (JwtAuthenticationToken) authentication;
+        Jwt jwt = jwtAuthentication.getToken();
+
+        String username = (String) jwt.getClaims().get("preferred_username");
+        User user = userService.getByUsername(username);
+        Clause userClause = new ClauseOneArg("user.id", Operation.Equals, user.getId().toString());
+
+        String[] channels = {String.valueOf(NotificationChannel.ALL), String.valueOf(NotificationChannel.IN_APP)};
+//        NotificationChannel[] channels = {NotificationChannel.ALL, NotificationChannel.IN_APP};
+        Clause channelsClause = new ClauseArrayArgs("notificationChannel", Operation.In, channels);
+
+        filter.add(userClause);
+        filter.add(channelsClause);
+        Specification<Notification> specification = new GenericSpecification<>(filter);
+        List<NotificationResponse> notificationResponseList;
+        Page<Notification> page;
+        page = notificationRepository.findAll(specification, pageRequest);
+
+        notificationResponseList = page.getContent().stream()
+                .map(notificationMapper::entityToResponse)
+                .collect(Collectors.toList());
+        return new PageImpl<>(notificationResponseList, pageRequest, page.getTotalElements());
     }
 
     public void seenNotification(Long id) {

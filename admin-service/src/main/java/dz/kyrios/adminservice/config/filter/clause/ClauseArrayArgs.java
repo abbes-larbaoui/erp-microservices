@@ -45,7 +45,14 @@ public class ClauseArrayArgs extends Clause {
                 }).toArray());
                 return criteriaBuilder.not(parentExpression.in(clauseArrayArgs.getArgs()));
             }
-            return parentExpression.in(clauseArrayArgs.getArgs());
+            return parentExpression.in(Arrays.stream(clauseArrayArgs.getArgs()).map(arg ->{
+                try {
+                    return  (Comparable) ValueFactory.toValue(root, attribute , arg);
+                } catch (ClassNotFoundException | ParseException e) {
+                    throw new RuntimeException(e);
+                }
+            }).toArray());
+//            return parentExpression.in(clauseArrayArgs.getArgs());
         }catch (IllegalArgumentException illegalArgumentException){
             throw  illegalArgumentException;
         }

@@ -156,6 +156,8 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException(id, "User not found with id: "));
         if (keycloakService.deleteUser(entity.getUuid())) {
             userRepository.delete(entity);
+
+            // TODO: send event about deleteing the user
         }
     }
 

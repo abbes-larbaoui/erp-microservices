@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class ModuleController {
     }
 
     @GetMapping("/api/v1/module")
+    @PreAuthorize("hasAuthority('MODULE_LIST')")
     public PageImpl<ModuleResponse> getAllFilter(@SortParam PageRequest pageRequest,
                                                  @Critiria List<Clause> filter,
                                                  @SearchValue ClauseOneArg searchValue) {
@@ -36,24 +38,28 @@ public class ModuleController {
     }
 
     @GetMapping("/api/v1/module/{id}")
+    @PreAuthorize("hasAuthority('MODULE_VIEW')")
     public ResponseEntity<ModuleResponse> getOne(@PathVariable Long id) {
         ModuleResponse response = moduleService.getOne(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/api/v1/module")
+    @PreAuthorize("hasAuthority('MODULE_CREATE')")
     public ResponseEntity<ModuleResponse> add(@RequestBody ModuleRequest request) {
         ModuleResponse response = moduleService.create(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping("/api/v1/module/{id}")
+    @PreAuthorize("hasAuthority('MODULE_UPDATE')")
     public ResponseEntity<ModuleResponse> update(@RequestBody ModuleRequest request,@PathVariable Long id) {
         ModuleResponse response = moduleService.update(request, id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/api/v1/module/{id}")
+    @PreAuthorize("hasAuthority('MODULE_DELETE')")
     public ResponseEntity<Object> delete(@PathVariable Long id) {
         try {
             moduleService.delete(id);

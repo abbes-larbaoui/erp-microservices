@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,6 +31,7 @@ public class RoleController {
     }
 
     @GetMapping("/api/v1/role/module/{moduleId}")
+    @PreAuthorize("hasAuthority('ROLE_LIST_MODULE')")
     public PageImpl<RoleResponse> getAllFilter(@SortParam PageRequest pageRequest,
                                                @Critiria List<Clause> filter,
                                                @SearchValue ClauseOneArg searchValue,
@@ -40,24 +42,28 @@ public class RoleController {
     }
 
     @PostMapping("/api/v1/role")
+    @PreAuthorize("hasAuthority('ROLE_VIEW')")
     public ResponseEntity<RoleResponse> add(@RequestBody RoleRequest request) {
         RoleResponse response = roleService.create(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/api/v1/role/{id}")
+    @PreAuthorize("hasAuthority('ROLE_CREATE')")
     public ResponseEntity<RoleResponse> getOne(@PathVariable Long id) {
         RoleResponse response = roleService.getOne(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("/api/v1/role/{id}")
+    @PreAuthorize("hasAuthority('ROLE_UPDATE')")
     public ResponseEntity<RoleResponse> update(@RequestBody RoleRequest request, @PathVariable Long id) {
         RoleResponse response = roleService.update(request, id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/api/v1/role/{id}")
+    @PreAuthorize("hasAuthority('ROLE_DELETE')")
     public ResponseEntity<Object> delete(@PathVariable Long id) {
         try {
             roleService.delete(id);
@@ -68,12 +74,14 @@ public class RoleController {
     }
 
     @PostMapping("/api/v1/role/authority-add/{roleId}")
+    @PreAuthorize("hasAuthority('ROLE_AUTHORITY_ADD')")
     public ResponseEntity<RoleResponse> addAuthorityToRole(@RequestBody AuthorityRequest request, @PathVariable Long roleId) {
         RoleResponse response = roleService.addAuthorityToRole(roleId, request.getId());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/api/v1/role/authority-remove/{roleId}")
+    @PreAuthorize("hasAuthority('ROLE_AUTHORITY_REMOVE')")
     public ResponseEntity<RoleResponse> removeAuthorityFromRole(@RequestBody AuthorityRequest request, @PathVariable Long roleId) {
         RoleResponse response = roleService.removeAuthorityFromRole(roleId, request.getId());
         return new ResponseEntity<>(response, HttpStatus.OK);

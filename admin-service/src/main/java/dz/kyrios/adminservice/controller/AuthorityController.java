@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class AuthorityController {
     }
 
     @GetMapping("/api/v1/authority")
+    @PreAuthorize("hasAuthority('AUTHORITY_LIST')")
     public PageImpl<AuthorityResponse> getAllFilter(@SortParam PageRequest pageRequest,
                                                     @Critiria List<Clause> filter,
                                                     @SearchValue ClauseOneArg searchValue) {
@@ -37,6 +39,7 @@ public class AuthorityController {
     }
 
     @GetMapping("/api/v1/authority/module/{moduleId}")
+    @PreAuthorize("hasAuthority('AUTHORITY_TYPE_LIST_MODULE')")
     public PageImpl<AuthorityResponse> getAllByModuleFilter(@SortParam PageRequest pageRequest,
                                                             @Critiria List<Clause> filter,
                                                             @SearchValue ClauseOneArg searchValue,
@@ -47,24 +50,28 @@ public class AuthorityController {
     }
 
     @GetMapping("/api/v1/authority/{id}")
+    @PreAuthorize("hasAuthority('AUTHORITY_VIEW')")
     public ResponseEntity<AuthorityResponse> getOne(@PathVariable Long id) {
         AuthorityResponse response = authorityService.getOne(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/api/v1/authority")
+    @PreAuthorize("hasAuthority('AUTHORITY_CREATE')")
     public ResponseEntity<AuthorityResponse> add(@RequestBody AuthorityRequest request) {
         AuthorityResponse response = authorityService.create(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping("/api/v1/authority/{id}")
+    @PreAuthorize("hasAuthority('AUTHORITY_UPDATE')")
     public ResponseEntity<AuthorityResponse> update(@RequestBody AuthorityRequest request, @PathVariable Long id) {
         AuthorityResponse response = authorityService.update(request, id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/api/v1/authority/{id}")
+    @PreAuthorize("hasAuthority('AUTHORITY_DELETE')")
     public ResponseEntity<Object> delete(@PathVariable Long id) {
         try {
             authorityService.delete(id);

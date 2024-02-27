@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class GroupController {
     }
 
     @GetMapping("/api/v1/group")
+    @PreAuthorize("hasAuthority('GROUP_LIST')")
     public PageImpl<GroupResponse> getAllFilter(@SortParam PageRequest pageRequest,
                                                 @Critiria List<Clause> filter,
                                                 @SearchValue ClauseOneArg searchValue) {
@@ -34,24 +36,28 @@ public class GroupController {
     }
 
     @GetMapping("/api/v1/group/{id}")
+    @PreAuthorize("hasAuthority('GROUP_VIEW')")
     public ResponseEntity<GroupResponse> getOne(@PathVariable Long id) {
         GroupResponse response = groupService.getOne(id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/api/v1/group")
+    @PreAuthorize("hasAuthority('GROUP_CREATE')")
     public ResponseEntity<GroupResponse> add(@RequestBody GroupRequest request) {
         GroupResponse response = groupService.create(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping("/api/v1/group/{id}")
+    @PreAuthorize("hasAuthority('GROUP_UPDATE')")
     public ResponseEntity<GroupResponse> update(@RequestBody GroupRequest request, @PathVariable Long id) {
         GroupResponse response = groupService.update(request, id);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/api/v1/group/{id}")
+    @PreAuthorize("hasAuthority('GROUP_DELETE')")
     public ResponseEntity<Object> delete(@PathVariable Long id) {
         try {
             groupService.delete(id);

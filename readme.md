@@ -1,9 +1,17 @@
-to start audit-log service: set NODE_ENV=dev&npm start
+<h2><u>About PROJECT</u></h2>
 
-TODO:
-1. add activate/deactivate for all services.
+This project implements a microservices architecture to create a scalable and maintainable information system that manages non-functional requirements,  It currently includes:
 
-**<u>ERP MICROSERVICES Specification</u>**
+* Authentication: Keycloak
+* Authorization (custom): Spring Boot and PostgreSQL
+* Audit Logging: NestJS and MongoDB
+* Notifications: Spring Boot and PostgreSQL
+* API Gateway: Spring Cloud Gateway
+* Discovery Server: Eureka
+* Asynchronous Communication: Kafka
+
+
+<h2><u>ERP MICROSERVICES Specifications:</u></h2>
 
     1.  Admin MS: 
 
@@ -11,20 +19,18 @@ TODO:
 
     3.  Notification MS:
 
-    4.  MS Config:
+    4.  Config MS:
 
     5.  Doc Manager MS:
 
     6.  Reporting MS:
 
-    <!-- -->
 
-
-1.  **<u>Admin MS:</u>**
+1.  <h3><u>Admin (Authorization) MS:</u></h3>
 
     <!-- -->
 
-    1.  Module Management :
+    1.  <h4>Module Management:</h4>
 
         1.  The functionalities:
 
@@ -162,7 +168,7 @@ TODO:
 
     <!-- -->
 
-    2.  User Management:
+    2.  <h4>User Management:</h4>
 
         1.  The functionalities:
 
@@ -374,7 +380,7 @@ TODO:
 
     <!-- -->
 
-    3.  User Group Management:
+    3. <h4> User Group Management:</h4>
 
         1.  The functionalities:
 
@@ -480,7 +486,10 @@ TODO:
 
             1.  Libel must be unique.
 
-    4.  Privilege Management:
+
+    <!-- -->
+    
+    4.  <h4>Privilege Management:</h4>
 
         1.  The functionalities:
 
@@ -602,7 +611,7 @@ TODO:
 
     <!-- -->
 
-    5.  Role Management:
+    5.  <h4>Role Management:</h4>
 
         1.  The functionalities:
 
@@ -724,7 +733,7 @@ TODO:
 
             <!-- -->
 
-2.  **<u>Audit Log MS:</u>**
+2.  <h3><u>Audit Log MS:</u></h3>
 
     1.  The functionalities:
 
@@ -855,12 +864,12 @@ TODO:
         </table>
 
     3.  The business rules:
-        1.  
+        1.
         <!-- -->
 
-3.  **<u>Notification MS:</u>**
+3.  <h3><u>Notification MS:</u></h3>
 
-    1.  Notification Management:
+    1.  <h4>Notification Management:<h4>
 
         1.  The functionalities:
 
@@ -986,9 +995,9 @@ TODO:
 
         3.  The business rules:
 
-            1. 
+            1.
 
-    2.  Management of schedules notifications:
+    2.  <h4>Management of schedules notifications:</h4>
 
         1.  The functionalities:
 
@@ -1117,7 +1126,7 @@ TODO:
 
             <!-- -->
 
-    3.  Management of notification templates:
+    3.  <h4>Management of notification templates:</h4>
 
         1.  The functionalities:
 

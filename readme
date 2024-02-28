@@ -1,4 +1,0 @@
-to start audit-log service: set NODE_ENV=dev&npm start
-
-TODO:
-1. add activate/deactivate for all services.

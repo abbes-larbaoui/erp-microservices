@@ -9,7 +9,7 @@ export class AuditLog extends Document {
   action: string;
 
   @Prop()
-  userName: string;
+  utilisateur: string;
 
   @Prop()
   entityName: string;

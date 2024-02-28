@@ -1,6 +1,6 @@
 export class AuditLogCreateDto {
   action: string;
-  userName: string;
+  utilisateur: string;
   entityName: string;
   entityId: number;
   moduleName: string;

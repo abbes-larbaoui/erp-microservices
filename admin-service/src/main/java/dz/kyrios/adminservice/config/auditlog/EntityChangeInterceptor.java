@@ -51,8 +51,6 @@ public class EntityChangeInterceptor extends EmptyInterceptor {
         trace.setAction(action);
         trace.setData(data);
 
-        //TODO: change to the user when implement security
-        trace.setUtilisateur("System");
         trace.setTimestamp(LocalDateTime.now());
 
         traceService.saveTrace(trace);

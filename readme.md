@@ -925,18 +925,6 @@ This project implements a microservices architecture to create a scalable and ma
             <td></td>
             <td></td>
             </tr>
-            <tr class="odd">
-            <td>5</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            </tr>
-            <tr class="even">
-            <td>6</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            </tr>
             </tbody>
             </table>
 

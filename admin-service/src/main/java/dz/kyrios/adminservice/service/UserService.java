@@ -290,6 +290,8 @@ public class UserService {
         Authority authority = authorityRepository.findById(authorityId)
                 .orElseThrow(() -> new NotFoundException(authorityId, "Authority not found with id: "));
 
+        // TODO: verify that the module of authority is in the modules of profile
+
         profile.addAuthority(authority);
         return userMapper.entityToResponse(profile.getUser());
     }

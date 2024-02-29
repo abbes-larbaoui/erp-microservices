@@ -25,23 +25,40 @@ public class CustomJwtAuthenticationConverter extends JwtAuthenticationConverter
 
     @Override
     protected Collection<GrantedAuthority> extractAuthorities(Jwt jwt) {
-        // Extract authorities from the JWT claims
+        /* Extract authorities from the JWT claims */
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         Collection<GrantedAuthority> authoritiesFromJwt = jwtGrantedAuthoritiesConverter.convert(jwt);
 
-        // Load additional authorities from the database
+        /* Load authorities from the profile */
         String username = jwt.getClaimAsString("preferred_username");
         User user = userService.getOneByUsername(username);
-        Set<GrantedAuthority> authoritiesFromDb = user.getActifProfile().getAuthorities()
-                .stream()
-                .filter(authority -> authority.getModule().getModuleCode().equals("admin-module"))
-                .map(authority -> new SimpleGrantedAuthority(authority.getLibelle()))
-                .collect(Collectors.toSet());
+        Set<GrantedAuthority> authoritiesFromDb = new HashSet<>();
+        if (user.getActifProfile() != null && user.getActifProfile().getAuthorities() != null) {
+            authoritiesFromDb = user.getActifProfile().getAuthorities()
+                    .stream()
+                    .filter(authority -> authority.getModule() != null && authority.getModule().getModuleCode().equals("admin-module"))
+                    .map(authority -> new SimpleGrantedAuthority(authority.getLibelle()))
+                    .collect(Collectors.toSet());
+        }
 
-        // Combine authorities
+        /* Load authorities from the profile roles */
+        Set<GrantedAuthority> roleAuthorities = new HashSet<>();
+        if (user.getActifProfile() != null && user.getActifProfile().getRoles() != null) {
+            user.getActifProfile().getRoles()
+                    .stream()
+                    .filter(role -> role.getModule() != null && role.getModule().getModuleCode().equals("admin-module"))
+                    .forEach(role -> {
+                        if (role.getAuthorities() != null) {
+                            role.getAuthorities().forEach(authority -> roleAuthorities.add(new SimpleGrantedAuthority(authority.getLibelle())));
+                        }
+                    });
+        }
+
+        /* Combine authorities */
         Set<GrantedAuthority> authorities = new HashSet<>();
         authorities.addAll(authoritiesFromJwt);
         authorities.addAll(authoritiesFromDb);
+        authorities.addAll(roleAuthorities);
 
         return authorities;
     }

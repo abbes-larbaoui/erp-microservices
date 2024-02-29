@@ -909,7 +909,19 @@ This project implements a microservices architecture to create a scalable and ma
             </tr>
             <tr class="even">
             <td>4</td>
+            <td>Send Email notification</td>
             <td></td>
+            <td></td>
+            </tr>
+            <tr class="even">
+            <td>5</td>
+            <td>Send SMS notification</td>
+            <td></td>
+            <td></td>
+            </tr>
+            <tr class="even">
+            <td>6</td>
+            <td>Push IN-APP notification</td>
             <td></td>
             <td></td>
             </tr>

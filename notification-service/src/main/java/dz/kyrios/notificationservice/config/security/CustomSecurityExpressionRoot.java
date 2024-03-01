@@ -11,9 +11,18 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Slf4j
 public class CustomSecurityExpressionRoot extends SecurityExpressionRoot implements MethodSecurityExpressionOperations {
+
+    private final String permissionServiceUri = "http://localhost:8080/admin-service/api/v1/permission";
+
+    private final String authorityParamName = "authority";
+
+    private final String moduleParamName = "module";
+
+    private final String moduleName = "notification-service";
 
     private Object filterObject;
     private Object returnObject;
@@ -29,7 +38,12 @@ public class CustomSecurityExpressionRoot extends SecurityExpressionRoot impleme
         if (authentication instanceof JwtAuthenticationToken) {
             JwtAuthenticationToken jwtAuthentication = (JwtAuthenticationToken) authentication;
             Jwt jwt = jwtAuthentication.getToken();
-            String url = "http://localhost:8080/admin-service/api/v1/permission?authority=" + authority + "&module=notification-service";
+
+            String url = UriComponentsBuilder.fromUriString(permissionServiceUri)
+                    .queryParam(authorityParamName, authority)
+                    .queryParam(moduleParamName, moduleName)
+                    .build()
+                    .toUriString();
 
             // Create headers
             HttpHeaders headers = new HttpHeaders();

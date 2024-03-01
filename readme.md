@@ -21,11 +21,11 @@ This project implements a microservices architecture to create a scalable and ma
 
     3.  Notification MS:
 
-    4.  Config MS:
+    4.  Config MS: (not yet)
 
-    5.  Doc Manager MS:
+    5.  Doc Manager MS: (not yet)
 
-    6.  Reporting MS:
+    6.  Reporting MS: (not yet)
 
 
 1.  <h3><u>Admin (Authorization) MS:</u></h3>

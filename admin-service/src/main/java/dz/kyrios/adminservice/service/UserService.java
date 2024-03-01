@@ -23,6 +23,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.MethodNotAllowedException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -290,9 +291,12 @@ public class UserService {
         Authority authority = authorityRepository.findById(authorityId)
                 .orElseThrow(() -> new NotFoundException(authorityId, "Authority not found with id: "));
 
-        // TODO: verify that the module of authority is in the modules of profile
+        if (profile.getModules().contains(authority.getModule())) {
+            profile.addAuthority(authority);
+        } else {
+            throw new RuntimeException("this profile of user haven't the access to the module of the authority");
+        }
 
-        profile.addAuthority(authority);
         return userMapper.entityToResponse(profile.getUser());
     }
 

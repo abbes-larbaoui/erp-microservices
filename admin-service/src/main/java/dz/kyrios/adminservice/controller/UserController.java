@@ -103,7 +103,7 @@ public class UserController {
     @PutMapping("/api/v1/user/profile/change-default-profile/{userId}/{profileId}")
     @PreAuthorize("hasAuthority('USER_ACTIF_PROFILE_CHANGE')")
     public ResponseEntity<UserResponse> changeActifProfile(@PathVariable Long userId,
-                                                             @PathVariable Long profileId) {
+                                                           @PathVariable Long profileId) {
         UserResponse response = userService.changeActifProfile(userId, profileId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -122,7 +122,7 @@ public class UserController {
     @PutMapping("/api/v1/user/profile/module/{profileId}/{moduleId}")
     @PreAuthorize("hasAuthority('USER_PROFILE_MODULE_ADD')")
     public ResponseEntity<UserResponse> addModuleToProfile(@PathVariable Long profileId,
-                                                             @PathVariable Long moduleId) {
+                                                           @PathVariable Long moduleId) {
         UserResponse response = userService.addModuleToProfile(profileId, moduleId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -130,7 +130,7 @@ public class UserController {
     @DeleteMapping("/api/v1/user/profile/module/{profileId}/{moduleId}")
     @PreAuthorize("hasAuthority('USER_PROFILE_MODULE_REMOVE')")
     public ResponseEntity<UserResponse> removeModuleFromProfile(@PathVariable Long profileId,
-                                                           @PathVariable Long moduleId) {
+                                                                @PathVariable Long moduleId) {
         UserResponse response = userService.removeModuleFromProfile(profileId, moduleId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -138,7 +138,7 @@ public class UserController {
     @PutMapping("/api/v1/user/profile/role/{profileId}/{roleId}")
     @PreAuthorize("hasAuthority('USER_PROFILE_ROLE_ADD')")
     public ResponseEntity<UserResponse> addRoleToProfile(@PathVariable Long profileId,
-                                                           @PathVariable Long roleId) {
+                                                         @PathVariable Long roleId) {
         UserResponse response = userService.addRoleToProfile(profileId, roleId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -146,23 +146,29 @@ public class UserController {
     @DeleteMapping("/api/v1/user/profile/role/{profileId}/{roleId}")
     @PreAuthorize("hasAuthority('USER_PROFILE_ROLE_REMOVE')")
     public ResponseEntity<UserResponse> removeRoleFromProfile(@PathVariable Long profileId,
-                                                                @PathVariable Long roleId) {
+                                                              @PathVariable Long roleId) {
         UserResponse response = userService.removeRoleFromProfile(profileId, roleId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PutMapping("/api/v1/user/profile/authority/{profileId}/{authorityId}")
     @PreAuthorize("hasAuthority('USER_PROFILE_AUTHORITY_ADD')")
-    public ResponseEntity<UserResponse> addAuthorityToProfile(@PathVariable Long profileId,
-                                                           @PathVariable Long authorityId) {
-        UserResponse response = userService.addAuthorityToProfile(profileId, authorityId);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<Object> addAuthorityToProfile(@PathVariable Long profileId,
+                                                              @PathVariable Long authorityId) {
+        try {
+            UserResponse response = userService.addAuthorityToProfile(profileId, authorityId);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DeleteMapping("/api/v1/user/profile/authority/{profileId}/{authorityId}")
     @PreAuthorize("hasAuthority('USER_PROFILE_AUTHORITY_REMOVE')")
     public ResponseEntity<UserResponse> removeAuthorityFromProfile(@PathVariable Long profileId,
-                                                                @PathVariable Long authorityId) {
+                                                                   @PathVariable Long authorityId) {
         UserResponse response = userService.removeAuthorityFromProfile(profileId, authorityId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

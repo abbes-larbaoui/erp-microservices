@@ -33,7 +33,7 @@ public class Profile implements Serializable {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Module> modules = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)

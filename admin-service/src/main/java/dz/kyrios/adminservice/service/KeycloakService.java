@@ -2,6 +2,7 @@ package dz.kyrios.adminservice.service;
 
 import dz.kyrios.adminservice.dto.user.UserCreateRequest;
 import dz.kyrios.adminservice.dto.user.UserRequest;
+import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.UserResource;
@@ -23,19 +24,25 @@ public class KeycloakService {
     @Value("${app.realm}")
     private String realm;
 
+    @Value("${app.auth-server-url}")
+    private String authServerUrl;
+
+    @Value("${app.admin-client-id}")
+    private String adminClientId;
+
+    @Value("${app.admin-client-secret}")
+    private String adminClientSecret;
+
     private Keycloak keycloak;
 
     @PostConstruct
     public void init() {
-
-        // TODO: change grantType
         keycloak = KeycloakBuilder.builder()
-                .serverUrl("http://localhost:8088/auth")
+                .serverUrl(authServerUrl)
                 .realm(realm)
-                .clientId("admin-cli")
-                .grantType("password")
-                .username("abbes_kyrios")
-                .password("abbes")
+                .grantType(OAuth2Constants.CLIENT_CREDENTIALS)
+                .clientId(adminClientId)
+                .clientSecret(adminClientSecret)
                 .build();
     }
 

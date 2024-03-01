@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @PostMapping("/api/v1/user/{profileTypeId}")
-    @PreAuthorize("hasAuthority('USER_VIEW')")
+    @PreAuthorize("hasAuthority('USER_CREATE')")
     public ResponseEntity<UserResponse> create(@RequestBody UserCreateRequest request,
                                                @PathVariable Long profileTypeId) {
         UserResponse response = userService.create(request, profileTypeId);
@@ -59,7 +59,7 @@ public class UserController {
     }
 
     @GetMapping("/api/v1/user/{id}")
-    @PreAuthorize("hasAuthority('USER_CREATE')")
+    @PreAuthorize("hasAuthority('USER_VIEW')")
     public ResponseEntity<UserResponse> getOne(@PathVariable Long id) {
         UserResponse response = userService.getOne(id);
         return new ResponseEntity<>(response, HttpStatus.OK);

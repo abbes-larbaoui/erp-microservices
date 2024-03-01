@@ -7,6 +7,7 @@ import dz.kyrios.adminservice.dto.profile.ProfileRequest;
 import dz.kyrios.adminservice.dto.user.UserCreateRequest;
 import dz.kyrios.adminservice.dto.user.UserRequest;
 import dz.kyrios.adminservice.dto.user.UserResponse;
+import dz.kyrios.adminservice.dto.user.UserSessionResponse;
 import dz.kyrios.adminservice.entity.*;
 import dz.kyrios.adminservice.entity.Module;
 import dz.kyrios.adminservice.enums.NotificationChannel;
@@ -14,7 +15,9 @@ import dz.kyrios.adminservice.enums.NotificationTemplateCode;
 import dz.kyrios.adminservice.event.notification.NotificationPayload;
 import dz.kyrios.adminservice.event.user.UserCreatedEvent;
 import dz.kyrios.adminservice.mapper.user.UserMapper;
+import dz.kyrios.adminservice.mapper.usersession.UserSessionMapper;
 import dz.kyrios.adminservice.repository.*;
+import org.keycloak.representations.idm.UserSessionRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -23,11 +26,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.MethodNotAllowedException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -48,6 +50,8 @@ public class UserService {
     
     private final UserMapper userMapper;
 
+    private final UserSessionMapper userSessionMapper;
+
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
     @Autowired
@@ -58,6 +62,7 @@ public class UserService {
                        AuthorityRepository authorityRepository,
                        RoleRepository roleRepository,
                        UserMapper userMapper,
+                       UserSessionMapper userSessionMapper,
                        KafkaTemplate<String, Object> kafkaTemplate) {
         this.keycloakService = keycloakService;
         this.userRepository = userRepository;
@@ -66,6 +71,7 @@ public class UserService {
         this.authorityRepository = authorityRepository;
         this.roleRepository = roleRepository;
         this.userMapper = userMapper;
+        this.userSessionMapper = userSessionMapper;
         this.kafkaTemplate = kafkaTemplate;
     }
 
@@ -309,5 +315,20 @@ public class UserService {
 
         profile.removeAuthority(authority);
         return userMapper.entityToResponse(profile.getUser());
+    }
+
+    public List<UserSessionResponse> getUsersSessions(Integer first, Integer max) {
+        List<UserSessionResponse> responses = new ArrayList<>();
+        List<UserSessionRepresentation> keycloakSessions = keycloakService.getUsersSessions(first, max);
+
+        keycloakSessions.forEach(userSessionRepresentation -> {
+
+            UserSessionResponse userSessionResponse = userSessionMapper.keycloakSessionToUserSessionResponse(userSessionRepresentation);
+            userSessionResponse.setUser(userMapper.entityToResponse(getOneByUsername(userSessionRepresentation.getUsername())));
+
+            responses.add(userSessionResponse);
+        });
+
+        return responses;
     }
 }

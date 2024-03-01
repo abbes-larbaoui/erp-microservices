@@ -5,9 +5,12 @@ import dz.kyrios.adminservice.dto.user.UserRequest;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
+import org.keycloak.admin.client.resource.ClientResource;
 import org.keycloak.admin.client.resource.UserResource;
+import org.keycloak.representations.idm.ClientRepresentation;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.keycloak.representations.idm.UserSessionRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -107,6 +110,16 @@ public class KeycloakService {
         UserRepresentation user = userResource.toRepresentation();
         user.setEnabled(enable);
         userResource.update(user);
+    }
+
+    public List<UserSessionRepresentation> getUsersSessions(Integer first, Integer max) {
+
+        // TODO: change client id
+        List<ClientRepresentation> clientRepresentations = keycloak.realm(realm).clients().findByClientId("notification-service");
+        ClientRepresentation representation = clientRepresentations.get(0);
+        ClientResource resource = keycloak.realm(realm).clients().get(representation.getId());
+
+        return resource.getUserSessions(first, max);
     }
 
 }

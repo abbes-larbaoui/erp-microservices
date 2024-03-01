@@ -11,6 +11,7 @@ import dz.kyrios.adminservice.dto.user.UserRequest;
 import dz.kyrios.adminservice.dto.user.UserResponse;
 import dz.kyrios.adminservice.enums.KeycloakRequiredAction;
 import dz.kyrios.adminservice.service.UserService;
+import org.keycloak.representations.idm.UserSessionRepresentation;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
@@ -171,5 +172,16 @@ public class UserController {
                                                                    @PathVariable Long authorityId) {
         UserResponse response = userService.removeAuthorityFromProfile(profileId, authorityId);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/api/v1/user/sessions")
+//    @PreAuthorize("hasAuthority('USER_SESSION_LIST')")
+    public ResponseEntity<Object> getUsersSessions(@RequestParam Integer first,
+                                                   @RequestParam Integer max) {
+        try {
+            return new ResponseEntity<>(userService.getUsersSessions(first, max), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

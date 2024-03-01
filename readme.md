@@ -292,6 +292,12 @@ This project implements a microservices architecture to create a scalable and ma
             <td></td>
             <td></td>
             </tr>
+            <tr class="odd">
+            <td>18</td>
+            <td>List online users</td>
+            <td></td>
+            <td></td>
+            </tr>
             </tbody>
             </table>
 

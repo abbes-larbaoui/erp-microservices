@@ -21,4 +21,6 @@ public class EntityTrace {
     private LocalDateTime timestamp;
 
     private String moduleName;
+
+    private String ipAddress;
 }

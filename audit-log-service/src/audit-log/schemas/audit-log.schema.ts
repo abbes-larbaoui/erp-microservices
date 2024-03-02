@@ -12,6 +12,9 @@ export class AuditLog extends Document {
   utilisateur: string;
 
   @Prop()
+  ipAddress: string;
+
+  @Prop()
   entityName: string;
 
   @Prop()

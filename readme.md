@@ -847,6 +847,13 @@ This project implements a microservices architecture to create a scalable and ma
         <td></td>
         <td></td>
         </tr>
+        <tr class="even">
+        <td>User IP Address</td>
+        <td>Text</td>
+        <td>yes</td>
+        <td></td>
+        <td></td>
+        </tr>
         <tr class="odd">
         <td>Action</td>
         <td>Text</td>

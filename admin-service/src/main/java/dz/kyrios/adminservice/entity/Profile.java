@@ -37,7 +37,7 @@ public class Profile implements Serializable {
     private Set<Role> roles = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Authority> authorities = new HashSet<>();
+    private Set<ProfileAuthority> authorities = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "group_id", referencedColumnName = "id")
@@ -62,11 +62,11 @@ public class Profile implements Serializable {
         this.getRoles().remove(role);
     }
 
-    public void addAuthority(Authority authority) {
-        this.getAuthorities().add(authority);
+    public void addAuthority(ProfileAuthority profileAuthority) {
+        this.getAuthorities().add(profileAuthority);
     }
 
-    public void removeAuthority(Authority authority) {
-        this.getAuthorities().remove(authority);
+    public void removeAuthority(ProfileAuthority profileAuthority) {
+        this.getAuthorities().remove(profileAuthority);
     }
 }

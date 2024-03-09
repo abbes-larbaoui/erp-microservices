@@ -46,6 +46,8 @@ public class UserService {
 
     private final AuthorityRepository authorityRepository;
 
+    private final ProfileAuthorityRepository profileAuthorityRepository;
+
     private final RoleRepository roleRepository;
     
     private final UserMapper userMapper;
@@ -60,6 +62,7 @@ public class UserService {
                        ProfileRepository profileRepository,
                        ModuleRepository moduleRepository,
                        AuthorityRepository authorityRepository,
+                       ProfileAuthorityRepository profileAuthorityRepository,
                        RoleRepository roleRepository,
                        UserMapper userMapper,
                        UserSessionMapper userSessionMapper,
@@ -69,6 +72,7 @@ public class UserService {
         this.profileRepository = profileRepository;
         this.moduleRepository = moduleRepository;
         this.authorityRepository = authorityRepository;
+        this.profileAuthorityRepository = profileAuthorityRepository;
         this.roleRepository = roleRepository;
         this.userMapper = userMapper;
         this.userSessionMapper = userSessionMapper;
@@ -290,32 +294,21 @@ public class UserService {
         return userMapper.entityToResponse(profile.getUser());
     }
 
-    public UserResponse addAuthorityToProfile(Long profileId, Long authorityId) {
-        Profile profile = profileRepository.findById(profileId)
-                .orElseThrow(() -> new NotFoundException(profileId, "Profile not found with id: "));
-
-        Authority authority = authorityRepository.findById(authorityId)
-                .orElseThrow(() -> new NotFoundException(authorityId, "Authority not found with id: "));
-
-        if (profile.getModules().contains(authority.getModule())) {
-            profile.addAuthority(authority);
-        } else {
-            throw new RuntimeException("this profile of user haven't the access to the module of the authority");
-        }
-
-        return userMapper.entityToResponse(profile.getUser());
-    }
-
-    public UserResponse removeAuthorityFromProfile(Long profileId, Long authorityId) {
-        Profile profile = profileRepository.findById(profileId)
-                .orElseThrow(() -> new NotFoundException(profileId, "Profile not found with id: "));
-
-        Authority authority = authorityRepository.findById(authorityId)
-                .orElseThrow(() -> new NotFoundException(authorityId, "Authority not found with id: "));
-
-        profile.removeAuthority(authority);
-        return userMapper.entityToResponse(profile.getUser());
-    }
+//    public UserResponse addAuthorityToProfile(Long profileId, Long authorityId) {
+//        Profile profile = profileRepository.findById(profileId)
+//                .orElseThrow(() -> new NotFoundException(profileId, "Profile not found with id: "));
+//
+//        Authority authority = authorityRepository.findById(authorityId)
+//                .orElseThrow(() -> new NotFoundException(authorityId, "Authority not found with id: "));
+//
+//        if (profile.getModules().contains(authority.getModule())) {
+//            profile.addAuthority(authority);
+//        } else {
+//            throw new RuntimeException("this profile of user haven't the access to the module of the authority");
+//        }
+//
+//        return userMapper.entityToResponse(profile.getUser());
+//    }
 
     public List<UserSessionResponse> getUsersSessions(Integer first, Integer max) {
         List<UserSessionResponse> responses = new ArrayList<>();
@@ -330,5 +323,77 @@ public class UserService {
         });
 
         return responses;
+    }
+
+
+    public UserResponse grantAuthorityToProfile(Long profileId, Long authorityId) {
+        Profile profile = profileRepository.findById(profileId)
+                .orElseThrow(() -> new NotFoundException(profileId, "Profile not found with id: "));
+
+        Authority authority = authorityRepository.findById(authorityId)
+                .orElseThrow(() -> new NotFoundException(authorityId, "Authority not found with id: "));
+
+        if (profile.getModules().contains(authority.getModule())) {
+            /* check if authority exists in profile authorities */
+            if (profile.getAuthorities().stream().anyMatch(profileAuthority -> profileAuthority.getAuthority().equals(authority))) {
+                profile.getAuthorities().stream()
+                        .filter(profileAuthority -> profileAuthority.getAuthority().getId().equals(authority.getId())
+                                && profileAuthority.getProfile().getId().equals(profile.getId()))
+                        .forEach(profileAuthority -> profileAuthority.setGranted(Boolean.TRUE));
+            } else {
+                ProfileAuthority profileAuthority = ProfileAuthority.builder()
+                        .authority(authority)
+                        .profile(profile)
+                        .granted(Boolean.TRUE)
+                        .build();
+                profile.addAuthority(profileAuthority);
+            }
+        } else {
+            throw new RuntimeException("this profile of user haven't the access to the module of the authority");
+        }
+
+        return userMapper.entityToResponse(profile.getUser());
+    }
+
+    public UserResponse revokeAuthorityToProfile(Long profileId, Long authorityId) {
+        Profile profile = profileRepository.findById(profileId)
+                .orElseThrow(() -> new NotFoundException(profileId, "Profile not found with id: "));
+
+        Authority authority = authorityRepository.findById(authorityId)
+                .orElseThrow(() -> new NotFoundException(authorityId, "Authority not found with id: "));
+
+        if (profile.getModules().contains(authority.getModule())) {
+            /* check if authority exists in profile authorities */
+            if (profile.getAuthorities().stream().anyMatch(profileAuthority -> profileAuthority.getAuthority().equals(authority))) {
+                profile.getAuthorities().stream()
+                        .filter(profileAuthority -> profileAuthority.getAuthority().getId().equals(authority.getId())
+                                && profileAuthority.getProfile().getId().equals(profile.getId()))
+                        .forEach(profileAuthority -> profileAuthority.setGranted(Boolean.FALSE));
+            } else {
+                ProfileAuthority profileAuthority = ProfileAuthority.builder()
+                        .authority(authority)
+                        .profile(profile)
+                        .granted(Boolean.FALSE)
+                        .build();
+                profile.addAuthority(profileAuthority);
+            }
+        } else {
+            throw new RuntimeException("this profile of user haven't the access to the module of the authority");
+        }
+
+        return userMapper.entityToResponse(profile.getUser());
+    }
+
+    public UserResponse removeAuthorityFromProfile(Long profileId, Long authorityId) {
+        Profile profile = profileRepository.findById(profileId)
+                .orElseThrow(() -> new NotFoundException(profileId, "Profile not found with id: "));
+
+        ProfileAuthority profileAuthority = profileAuthorityRepository.findProfileAuthorityByProfile_IdAndAuthority_Id(profileId, authorityId)
+                .orElseThrow(() -> new NotFoundException("Authority not found with id: " + authorityId + "in Profile with id: " + profileId));
+
+        if (profile.getAuthorities() != null) {
+            profile.getAuthorities().removeIf(profileAuthority1 -> profileAuthority1.equals(profileAuthority));
+        }
+        return userMapper.entityToResponse(profile.getUser());
     }
 }

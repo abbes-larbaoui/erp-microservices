@@ -36,8 +36,10 @@ public class CustomJwtAuthenticationConverter extends JwtAuthenticationConverter
         if (user.getActifProfile() != null && user.getActifProfile().getAuthorities() != null) {
             authoritiesFromDb = user.getActifProfile().getAuthorities()
                     .stream()
-                    .filter(authority -> authority.getModule() != null && authority.getModule().getModuleCode().equals("admin-module"))
-                    .map(authority -> new SimpleGrantedAuthority(authority.getLibelle()))
+                    .filter(authority -> authority.getAuthority().getModule() != null
+                            && authority.getAuthority().getModule().getModuleCode().equals("admin-module")
+                            && authority.getGranted())
+                    .map(authority -> new SimpleGrantedAuthority(authority.getAuthority().getLibelle()))
                     .collect(Collectors.toSet());
         }
 

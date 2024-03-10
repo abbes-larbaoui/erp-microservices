@@ -46,10 +46,14 @@ public class PermissionService {
         /* get user actif profile authorities and check if conatins the authority requested */
         Profile profile = userService.getOneByUsername(username).getActifProfile();
 
+        /* return false for revoked authority or true if granted */
+        if (profile.getAuthorities().stream().anyMatch(profileAuthority -> profileAuthority.getAuthority().equals(authority))) {
+            return profile.getAuthorities().stream()
+                    .anyMatch(profileAuthority -> profileAuthority.getAuthority().equals(authority) && profileAuthority.getGranted());
+        }
+
         if (profile != null) {
-            boolean hasMatchingAuth = Stream.concat(
-                            profile.getRoles().stream().flatMap(role -> role.getAuthorities().stream()),
-                            profile.getAuthorities().stream())
+            boolean hasMatchingAuth = profile.getRoles().stream().flatMap(role -> role.getAuthorities().stream())
                     .anyMatch(auth -> auth.equals(authority));
 
             boolean hasModule = profile.getModules().contains(module);

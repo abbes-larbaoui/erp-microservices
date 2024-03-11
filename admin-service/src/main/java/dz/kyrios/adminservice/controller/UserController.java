@@ -12,7 +12,6 @@ import dz.kyrios.adminservice.dto.user.UserRequest;
 import dz.kyrios.adminservice.dto.user.UserResponse;
 import dz.kyrios.adminservice.enums.KeycloakRequiredAction;
 import dz.kyrios.adminservice.service.UserService;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,12 +32,12 @@ public class UserController {
 
     @GetMapping("/api/v1/user")
     @PreAuthorize("hasAuthority('USER_LIST')")
-    public Object getAllFilter(@SortParam PageRequest pageRequest,
+    public ResponseEntity<Object> getAllFilter(@SortParam PageRequest pageRequest,
                                                @Critiria List<Clause> filter,
                                                @SearchValue ClauseOneArg searchValue) {
         try {
             filter.add(searchValue);
-            return userService.findAllFilter(pageRequest, filter);
+            return new ResponseEntity<>(userService.findAllFilter(pageRequest, filter), HttpStatus.OK);
         } catch (NotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         } catch (RuntimeException e) {

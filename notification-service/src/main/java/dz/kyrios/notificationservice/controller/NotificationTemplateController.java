@@ -1,5 +1,6 @@
 package dz.kyrios.notificationservice.controller;
 
+import dz.kyrios.notificationservice.config.exception.NotFoundException;
 import dz.kyrios.notificationservice.config.filter.clause.Clause;
 import dz.kyrios.notificationservice.config.filter.clause.ClauseOneArg;
 import dz.kyrios.notificationservice.config.filter.handlerMethodArgumentResolver.Critiria;
@@ -8,7 +9,6 @@ import dz.kyrios.notificationservice.config.filter.handlerMethodArgumentResolver
 import dz.kyrios.notificationservice.dto.notificationtemplate.NotificationTemplateRequest;
 import dz.kyrios.notificationservice.dto.notificationtemplate.NotificationTemplateResponse;
 import dz.kyrios.notificationservice.service.NotificationTemplateService;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 public class NotificationTemplateController {
-    
+
     private final NotificationTemplateService notificationTemplateService;
 
     public NotificationTemplateController(NotificationTemplateService notificationTemplateService) {
@@ -28,32 +28,65 @@ public class NotificationTemplateController {
 
     @GetMapping("/api/v1/notification-template")
     @PreAuthorize("hasCustomAuthority('NOTIFICATION_TEMPLATE_LIST')")
-    public PageImpl<NotificationTemplateResponse> getAllFilter(@SortParam PageRequest pageRequest,
-                                                               @Critiria List<Clause> filter,
-                                                               @SearchValue ClauseOneArg searchValue) {
-        filter.add(searchValue);
-        return notificationTemplateService.findAllFilter(pageRequest, filter);
+    public ResponseEntity<Object> getAllFilter(@SortParam PageRequest pageRequest,
+                                               @Critiria List<Clause> filter,
+                                               @SearchValue ClauseOneArg searchValue) {
+        try {
+            filter.add(searchValue);
+            return new ResponseEntity<>(notificationTemplateService.findAllFilter(pageRequest, filter), HttpStatus.OK);
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/api/v1/notification-template/{id}")
     @PreAuthorize("hasCustomAuthority('NOTIFICATION_TEMPLATE_VIEW')")
-    public ResponseEntity<NotificationTemplateResponse> getOne(@PathVariable Long id) {
-        NotificationTemplateResponse response = notificationTemplateService.getOne(id);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<Object> getOne(@PathVariable Long id) {
+        try {
+            NotificationTemplateResponse response = notificationTemplateService.getOne(id);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping("/api/v1/notification-template")
     @PreAuthorize("hasCustomAuthority('NOTIFICATION_TEMPLATE_CREATE')")
-    public ResponseEntity<NotificationTemplateResponse> create(@RequestBody NotificationTemplateRequest request) {
-        NotificationTemplateResponse response = notificationTemplateService.create(request);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    public ResponseEntity<Object> create(@RequestBody NotificationTemplateRequest request) {
+        try {
+            NotificationTemplateResponse response = notificationTemplateService.create(request);
+            return new ResponseEntity<>(response, HttpStatus.CREATED);
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PutMapping("/api/v1/notification-template/{id}")
     @PreAuthorize("hasCustomAuthority('NOTIFICATION_TEMPLATE_UPDATE')")
-    public ResponseEntity<NotificationTemplateResponse> update(@RequestBody NotificationTemplateRequest request,@PathVariable Long id) {
-        NotificationTemplateResponse response = notificationTemplateService.update(request, id);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<Object> update(@RequestBody NotificationTemplateRequest request,
+                                         @PathVariable Long id) {
+        try {
+            NotificationTemplateResponse response = notificationTemplateService.update(request, id);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DeleteMapping("/api/v1/notification-template/{id}")
@@ -62,6 +95,10 @@ public class NotificationTemplateController {
         try {
             notificationTemplateService.delete(id);
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

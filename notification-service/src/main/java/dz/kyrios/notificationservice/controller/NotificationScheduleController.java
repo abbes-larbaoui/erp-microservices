@@ -10,11 +10,9 @@ import dz.kyrios.notificationservice.config.filter.handlerMethodArgumentResolver
 import dz.kyrios.notificationservice.dto.notificationschedule.NotificationScheduleRequest;
 import dz.kyrios.notificationservice.dto.notificationschedule.NotificationScheduleResponse;
 import dz.kyrios.notificationservice.service.NotificationScheduleService;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,18 +28,34 @@ public class NotificationScheduleController {
 
     @GetMapping("/api/v1/notification-schedule")
 //    @PreAuthorize("hasCustomAuthority('NOTIFICATION_SCHEDULE_LIST')")
-    public PageImpl<NotificationScheduleResponse> getAllFilter(@SortParam PageRequest pageRequest,
-                                                               @Critiria List<Clause> filter,
-                                                               @SearchValue ClauseOneArg searchValue) {
-        filter.add(searchValue);
-        return notificationScheduleService.findAllFilter(pageRequest, filter);
+    public ResponseEntity<Object> getAllFilter(@SortParam PageRequest pageRequest,
+                                               @Critiria List<Clause> filter,
+                                               @SearchValue ClauseOneArg searchValue) {
+        try {
+            filter.add(searchValue);
+            return new ResponseEntity<>(notificationScheduleService.findAllFilter(pageRequest, filter), HttpStatus.OK);
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/api/v1/notification-schedule/{id}")
 //    @PreAuthorize("hasCustomAuthority('NOTIFICATION_SCHEDULE_VIEW')")
-    public ResponseEntity<NotificationScheduleResponse> getOne(@PathVariable Long id) {
-        NotificationScheduleResponse response = notificationScheduleService.getOne(id);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<Object> getOne(@PathVariable Long id) {
+        try {
+            NotificationScheduleResponse response = notificationScheduleService.getOne(id);
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping("/api/v1/notification-schedule")
@@ -50,6 +64,10 @@ public class NotificationScheduleController {
         try {
             NotificationScheduleResponse response = notificationScheduleService.create(request);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -57,14 +75,17 @@ public class NotificationScheduleController {
 
     @PutMapping("/api/v1/notification-schedule/{id}")
 //    @PreAuthorize("hasCustomAuthority('NOTIFICATION_SCHEDULE_UPDATE')")
-    public ResponseEntity<Object> update(@RequestBody NotificationScheduleRequest request, @PathVariable Long id) {
+    public ResponseEntity<Object> update(@RequestBody NotificationScheduleRequest request,
+                                         @PathVariable Long id) {
         try {
             NotificationScheduleResponse response = notificationScheduleService.update(request, id);
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (NotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        } catch (MethodNotAllowedException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.METHOD_NOT_ALLOWED);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_ACCEPTABLE);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

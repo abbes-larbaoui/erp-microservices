@@ -10,7 +10,7 @@ This project implements a microservices architecture to create a scalable and ma
 * Discovery Server: Eureka
 * Asynchronous Communication: Kafka
 
-![alt text](https://github.com/abbes-larbaoui/erp-microservices/blob/master/ArchitectureDiagram.jpg?raw=true)
+![alt text](https://github.com/abbes-larbaoui/erp-microservices/blob/master/ArchitectureDiagram_.jpg?raw=true)
 
 
 <h2><u>ERP MICROSERVICES Specifications:</u></h2>

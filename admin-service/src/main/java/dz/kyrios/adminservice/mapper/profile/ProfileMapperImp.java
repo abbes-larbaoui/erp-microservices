@@ -3,11 +3,13 @@ package dz.kyrios.adminservice.mapper.profile;
 import dz.kyrios.adminservice.config.exception.NotFoundException;
 import dz.kyrios.adminservice.dto.authority.AuthorityResponse;
 import dz.kyrios.adminservice.dto.module.ModuleResponse;
+import dz.kyrios.adminservice.dto.profile.ProfileAuthorityResponse;
 import dz.kyrios.adminservice.dto.profile.ProfileRequest;
 import dz.kyrios.adminservice.dto.profile.ProfileResponse;
 import dz.kyrios.adminservice.dto.role.RoleResponse;
 import dz.kyrios.adminservice.entity.Group;
 import dz.kyrios.adminservice.entity.Profile;
+import dz.kyrios.adminservice.entity.ProfileAuthority;
 import dz.kyrios.adminservice.entity.User;
 import dz.kyrios.adminservice.mapper.authority.AuthorityMapper;
 import dz.kyrios.adminservice.mapper.group.GroupMapper;
@@ -80,9 +82,9 @@ public class ProfileMapperImp implements ProfileMapper{
         if(entity.getRoles() != null && !entity.getRoles().isEmpty()) {
             entity.getRoles().forEach(role -> roleResponses.add(roleMapper.entityToResponse(role)));
         }
-        Set<AuthorityResponse> authorityResponses = new HashSet<>();
+        Set<ProfileAuthorityResponse> authorityResponses = new HashSet<>();
         if(entity.getAuthorities() != null && !entity.getAuthorities().isEmpty()) {
-            entity.getAuthorities().forEach(authority -> authorityResponses.add(authorityMapper.entityToResponse(authority)));
+            entity.getAuthorities().forEach(authority -> authorityResponses.add(profileAuthorityToResponse(authority)));
         }
         return ProfileResponse.builder()
                 .id(entity.getId())
@@ -93,6 +95,14 @@ public class ProfileMapperImp implements ProfileMapper{
                 .roleResponses(roleResponses)
                 .moduleResponses(moduleResponses)
                 .actif(entity.getActif())
+                .build();
+    }
+
+    private ProfileAuthorityResponse profileAuthorityToResponse(ProfileAuthority entity) {
+        return ProfileAuthorityResponse.builder()
+                .id(entity.getId())
+                .authority(authorityMapper.entityToResponse(entity.getAuthority()))
+                .granted(entity.getGranted())
                 .build();
     }
 }

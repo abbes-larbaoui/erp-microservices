@@ -21,6 +21,6 @@ public class ProfileResponse {
     private String libelle;
     private Set<ModuleResponse> moduleResponses;
     private Set<RoleResponse> roleResponses;
-    private Set<AuthorityResponse> authorityResponses;
+    private Set<ProfileAuthorityResponse> authorityResponses;
     private Boolean actif;
 }

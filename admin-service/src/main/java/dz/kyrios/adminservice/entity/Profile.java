@@ -14,7 +14,8 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "profile")
+@Entity
+@Table(name = "profile")
 public class Profile implements Serializable {
 
     @Id

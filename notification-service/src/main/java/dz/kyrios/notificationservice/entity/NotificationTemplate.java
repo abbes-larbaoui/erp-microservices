@@ -11,7 +11,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "notification_template")
+@Entity
+@Table(name = "notification_template")
 public class NotificationTemplate implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

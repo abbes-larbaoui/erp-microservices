@@ -11,7 +11,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "t_group")
+@Entity
+@Table(name = "t_group")
 public class Group implements Serializable {
 
     @Id

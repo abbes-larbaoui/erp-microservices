@@ -10,7 +10,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "profile_authority")
+@Entity
+@Table(name = "profile_authority")
 public class ProfileAuthority  implements Serializable {
 
     @Id

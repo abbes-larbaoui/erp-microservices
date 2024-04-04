@@ -12,7 +12,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "authority")
+@Entity
+@Table(name = "authority")
 public class Authority implements Serializable {
 
     @Id

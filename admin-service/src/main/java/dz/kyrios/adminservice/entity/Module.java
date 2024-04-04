@@ -11,7 +11,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "module")
+@Entity
+@Table(name = "module")
 public class Module implements Serializable {
 
     @Id

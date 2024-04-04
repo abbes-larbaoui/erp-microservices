@@ -12,7 +12,8 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "t_role")
+@Entity
+@Table(name = "t_role")
 public class Role implements Serializable {
 
     @Id

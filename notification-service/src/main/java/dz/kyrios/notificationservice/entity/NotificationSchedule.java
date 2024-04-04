@@ -14,7 +14,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "notification_schedule")
+@Entity
+@Table(name = "notification_schedule")
 public class NotificationSchedule implements Serializable {
 
     @Id

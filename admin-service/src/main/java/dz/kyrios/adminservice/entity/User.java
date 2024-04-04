@@ -13,7 +13,8 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "t_user")
+@Entity
+@Table(name = "t_user")
 public class User implements Serializable {
 
     @Id

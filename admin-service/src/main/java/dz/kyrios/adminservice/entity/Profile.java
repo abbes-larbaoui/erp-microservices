@@ -37,7 +37,7 @@ public class Profile implements Serializable {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<ProfileAuthority> authorities = new HashSet<>();
 
     @ManyToOne

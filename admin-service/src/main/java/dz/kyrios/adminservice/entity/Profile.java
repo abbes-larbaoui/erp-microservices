@@ -3,8 +3,8 @@ package dz.kyrios.adminservice.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -37,7 +37,7 @@ public class Profile implements Serializable {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "profile" ,cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ProfileAuthority> authorities = new HashSet<>();
 
     @ManyToOne

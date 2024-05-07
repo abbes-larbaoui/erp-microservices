@@ -2,10 +2,10 @@ package dz.kyrios.adminservice.config.security;
 
 import dz.kyrios.adminservice.entity.User;
 import dz.kyrios.adminservice.service.UserService;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +15,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
-public class CustomJwtAuthenticationConverter extends JwtAuthenticationConverter {
+public class CustomJwtAuthenticationConverter {
 
     private final UserService userService;
 
@@ -23,8 +23,7 @@ public class CustomJwtAuthenticationConverter extends JwtAuthenticationConverter
         this.userService = userService;
     }
 
-    @Override
-    protected Collection<GrantedAuthority> extractAuthorities(Jwt jwt) {
+    protected Set<GrantedAuthority> extractAuthorities(Jwt jwt) {
         /* Extract authorities from the JWT claims */
         JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
         Collection<GrantedAuthority> authoritiesFromJwt = jwtGrantedAuthoritiesConverter.convert(jwt);

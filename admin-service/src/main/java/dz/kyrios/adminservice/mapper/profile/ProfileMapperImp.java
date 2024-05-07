@@ -18,7 +18,6 @@ import dz.kyrios.adminservice.mapper.role.RoleMapper;
 import dz.kyrios.adminservice.mapper.user.UserMapper;
 import dz.kyrios.adminservice.repository.GroupRepository;
 import dz.kyrios.adminservice.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -41,7 +40,6 @@ public class ProfileMapperImp implements ProfileMapper{
 
     private final AuthorityMapper authorityMapper;
 
-    @Autowired
     public ProfileMapperImp(UserRepository userRepository,
                             GroupRepository groupRepository,
                             UserMapper userMapper,

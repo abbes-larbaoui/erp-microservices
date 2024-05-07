@@ -10,7 +10,6 @@ import dz.kyrios.adminservice.config.filter.handlerMethodArgumentResolver.SortPa
 import dz.kyrios.adminservice.dto.authority.AuthorityRequest;
 import dz.kyrios.adminservice.dto.authority.AuthorityResponse;
 import dz.kyrios.adminservice.service.AuthorityService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +23,6 @@ public class AuthorityController {
 
     private final AuthorityService authorityService;
 
-    @Autowired
     public AuthorityController(AuthorityService authorityService) {
         this.authorityService = authorityService;
     }

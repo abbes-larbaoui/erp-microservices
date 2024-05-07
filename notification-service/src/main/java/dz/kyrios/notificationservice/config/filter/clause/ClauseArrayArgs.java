@@ -8,7 +8,7 @@ import dz.kyrios.notificationservice.config.filter.creator.JoinCreator;
 import dz.kyrios.notificationservice.config.filter.enums.Operation;
 import dz.kyrios.notificationservice.config.filter.factory.ValueFactory;
 
-import javax.persistence.criteria.*;
+import jakarta.persistence.criteria.*;
 import java.text.ParseException;
 import java.util.Arrays;
 

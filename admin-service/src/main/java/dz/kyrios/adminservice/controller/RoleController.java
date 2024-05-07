@@ -11,7 +11,6 @@ import dz.kyrios.adminservice.dto.authority.AuthorityRequest;
 import dz.kyrios.adminservice.dto.role.RoleRequest;
 import dz.kyrios.adminservice.dto.role.RoleResponse;
 import dz.kyrios.adminservice.service.RoleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +24,6 @@ public class RoleController {
 
     private final RoleService roleService;
 
-    @Autowired
     public RoleController(RoleService roleService) {
         this.roleService = roleService;
     }

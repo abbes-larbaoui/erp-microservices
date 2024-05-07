@@ -3,8 +3,8 @@ package dz.kyrios.notificationservice.config.filter.factory;
 import dz.kyrios.notificationservice.config.filter.converter.DateConvertor;
 import org.springframework.util.ClassUtils;
 
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Root;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Root;
 import java.text.ParseException;
 import java.time.LocalDate;
 

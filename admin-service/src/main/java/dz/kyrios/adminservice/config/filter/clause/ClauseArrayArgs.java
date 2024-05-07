@@ -8,7 +8,7 @@ import dz.kyrios.adminservice.config.filter.creator.JoinCreator;
 import dz.kyrios.adminservice.config.filter.enums.Operation;
 import dz.kyrios.adminservice.config.filter.factory.ValueFactory;
 
-import javax.persistence.criteria.*;
+import jakarta.persistence.criteria.*;
 import java.text.ParseException;
 import java.util.Arrays;
 

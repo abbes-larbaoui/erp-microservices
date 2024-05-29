@@ -32,6 +32,8 @@ This project implements a microservices architecture to create a scalable and ma
 
     <!-- -->
 
+    ![alt text](https://github.com/abbes-larbaoui/erp-microservices/blob/master/admin-service/admin-conception.png?raw=true)
+
     1.  <h4>Module Management:</h4>
 
         1.  The functionalities:

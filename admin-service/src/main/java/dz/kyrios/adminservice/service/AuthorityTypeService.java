@@ -8,7 +8,6 @@ import dz.kyrios.adminservice.dto.authoritytype.AuthorityTypeResponse;
 import dz.kyrios.adminservice.entity.AuthorityType;
 import dz.kyrios.adminservice.mapper.authoritytype.AuthorityTypeMapper;
 import dz.kyrios.adminservice.repository.AuthorityTypeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -27,7 +26,6 @@ public class AuthorityTypeService {
     
     private final AuthorityTypeMapper authorityTypeMapper;
 
-    @Autowired
     public AuthorityTypeService(AuthorityTypeRepository authorityTypeRepository, AuthorityTypeMapper authorityTypeMapper) {
         this.authorityTypeRepository = authorityTypeRepository;
         this.authorityTypeMapper = authorityTypeMapper;

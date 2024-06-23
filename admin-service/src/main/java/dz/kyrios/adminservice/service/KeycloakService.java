@@ -2,6 +2,7 @@ package dz.kyrios.adminservice.service;
 
 import dz.kyrios.adminservice.dto.user.UserCreateRequest;
 import dz.kyrios.adminservice.dto.user.UserRequest;
+import jakarta.annotation.PostConstruct;
 import org.keycloak.OAuth2Constants;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
@@ -15,8 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 import java.util.Collections;
 import java.util.List;
 

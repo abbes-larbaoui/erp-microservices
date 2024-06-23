@@ -3,7 +3,7 @@ package dz.kyrios.notificationservice.entity;
 import dz.kyrios.notificationservice.enums.NotificationTemplateCode;
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 
 @Getter

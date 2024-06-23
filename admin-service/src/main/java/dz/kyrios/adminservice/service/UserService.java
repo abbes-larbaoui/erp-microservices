@@ -18,7 +18,6 @@ import dz.kyrios.adminservice.mapper.user.UserMapper;
 import dz.kyrios.adminservice.mapper.usersession.UserSessionMapper;
 import dz.kyrios.adminservice.repository.*;
 import org.keycloak.representations.idm.UserSessionRepresentation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -56,7 +55,6 @@ public class UserService {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
-    @Autowired
     public UserService(KeycloakService keycloakService,
                        UserRepository userRepository,
                        ProfileRepository profileRepository,

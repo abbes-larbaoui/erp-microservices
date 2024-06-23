@@ -13,7 +13,6 @@ import dz.kyrios.adminservice.mapper.role.RoleMapper;
 import dz.kyrios.adminservice.repository.AuthorityRepository;
 import dz.kyrios.adminservice.repository.ModuleRepository;
 import dz.kyrios.adminservice.repository.RoleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -36,7 +35,6 @@ public class RoleService {
     
     private final RoleMapper roleMapper;
 
-    @Autowired
     public RoleService(RoleRepository roleRepository,
                        ModuleRepository moduleRepository,
                        AuthorityRepository authorityRepository,

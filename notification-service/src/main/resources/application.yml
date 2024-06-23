@@ -41,8 +41,8 @@ eureka:
     serviceUrl:
       defaultZone: http://eureka:password@localhost:8761/eureka
 
-#permission-service:
-#  uri: http://localhost:8080/admin-service/api/v1/permission
-#  authority-param-name: authority
-#  module-param-name: module
-#  module-name: notification-service
+permission-service:
+  uri: http://localhost:8080/admin-service/api/v1/permission
+  authority-param-name: authority
+  module-param-name: module
+  module-name: notification-service

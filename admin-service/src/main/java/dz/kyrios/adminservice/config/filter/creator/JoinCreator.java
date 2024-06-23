@@ -1,7 +1,7 @@
 package dz.kyrios.adminservice.config.filter.creator;
 
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Root;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.Root;
 
 public class JoinCreator {
     static public Join createJoin(Root root, String field){

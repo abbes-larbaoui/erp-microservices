@@ -8,7 +8,6 @@ import dz.kyrios.adminservice.dto.module.ModuleResponse;
 import dz.kyrios.adminservice.entity.Module;
 import dz.kyrios.adminservice.mapper.module.ModuleMapper;
 import dz.kyrios.adminservice.repository.ModuleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -27,7 +26,6 @@ public class ModuleService {
 
     private final ModuleMapper moduleMapper;
 
-    @Autowired
     public ModuleService(ModuleRepository moduleRepository, ModuleMapper moduleMapper) {
         this.moduleRepository = moduleRepository;
         this.moduleMapper = moduleMapper;

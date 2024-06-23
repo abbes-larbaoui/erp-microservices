@@ -5,7 +5,7 @@ import dz.kyrios.notificationservice.enums.NotificationScheduleStatus;
 import dz.kyrios.notificationservice.enums.NotificationStatus;
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 

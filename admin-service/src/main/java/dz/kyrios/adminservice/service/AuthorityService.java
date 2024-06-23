@@ -12,7 +12,6 @@ import dz.kyrios.adminservice.mapper.authority.AuthorityMapper;
 import dz.kyrios.adminservice.repository.AuthorityRepository;
 import dz.kyrios.adminservice.repository.AuthorityTypeRepository;
 import dz.kyrios.adminservice.repository.ModuleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -35,7 +34,6 @@ public class AuthorityService {
     
     private final AuthorityMapper authorityMapper;
 
-    @Autowired
     public AuthorityService(AuthorityRepository authorityRepository,
                             ModuleRepository moduleRepository,
                             AuthorityTypeRepository authorityTypeRepository,

@@ -9,7 +9,6 @@ import dz.kyrios.adminservice.config.filter.handlerMethodArgumentResolver.SortPa
 import dz.kyrios.adminservice.dto.module.ModuleRequest;
 import dz.kyrios.adminservice.dto.module.ModuleResponse;
 import dz.kyrios.adminservice.service.ModuleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +22,6 @@ public class ModuleController {
 
     private final ModuleService moduleService;
 
-    @Autowired
     public ModuleController(ModuleService moduleService) {
         this.moduleService = moduleService;
     }

@@ -13,6 +13,7 @@ import dz.kyrios.notificationservice.service.NotificationScheduleService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class NotificationScheduleController {
     }
 
     @GetMapping("/api/v1/notification-schedule")
+    @PreAuthorize("@authz.hasCustomAuthority('NOTIFICATION_SCHEDULE_LIST')")
 //    @PreAuthorize("hasCustomAuthority('NOTIFICATION_SCHEDULE_LIST')")
     public ResponseEntity<Object> getAllFilter(@SortParam PageRequest pageRequest,
                                                @Critiria List<Clause> filter,
@@ -44,6 +46,7 @@ public class NotificationScheduleController {
     }
 
     @GetMapping("/api/v1/notification-schedule/{id}")
+    @PreAuthorize("@authz.hasCustomAuthority('NOTIFICATION_SCHEDULE_VIEW')")
 //    @PreAuthorize("hasCustomAuthority('NOTIFICATION_SCHEDULE_VIEW')")
     public ResponseEntity<Object> getOne(@PathVariable Long id) {
         try {
@@ -59,6 +62,7 @@ public class NotificationScheduleController {
     }
 
     @PostMapping("/api/v1/notification-schedule")
+    @PreAuthorize("@authz.hasCustomAuthority('NOTIFICATION_SCHEDULE_CREATE')")
 //    @PreAuthorize("hasCustomAuthority('NOTIFICATION_SCHEDULE_CREATE')")
     public ResponseEntity<Object> create(@RequestBody NotificationScheduleRequest request) {
         try {
@@ -74,6 +78,7 @@ public class NotificationScheduleController {
     }
 
     @PutMapping("/api/v1/notification-schedule/{id}")
+    @PreAuthorize("@authz.hasCustomAuthority('NOTIFICATION_SCHEDULE_UPDATE')")
 //    @PreAuthorize("hasCustomAuthority('NOTIFICATION_SCHEDULE_UPDATE')")
     public ResponseEntity<Object> update(@RequestBody NotificationScheduleRequest request,
                                          @PathVariable Long id) {
@@ -90,6 +95,7 @@ public class NotificationScheduleController {
     }
 
     @DeleteMapping("/api/v1/notification-schedule/{id}")
+    @PreAuthorize("@authz.hasCustomAuthority('NOTIFICATION_SCHEDULE_DELETE')")
 //    @PreAuthorize("hasCustomAuthority('NOTIFICATION_SCHEDULE_DELETE')")
     public ResponseEntity<Object> delete(@PathVariable Long id) {
         try {
